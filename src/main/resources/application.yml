@@ -1,0 +1,16 @@
+Spring:
+  datasource:
+    url: jdbc:mariadb://127.0.0.1:3306/bookstore
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: ENC(kZulKeTBTgwhJQAnuZ3plG4LXV6ciAfE)
+    password: ENC(t7APcxR4FMdHo/DbY+BEPdAPiIKnyUGz)
+
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
