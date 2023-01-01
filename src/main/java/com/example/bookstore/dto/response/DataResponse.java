@@ -1,4 +1,4 @@
-package com.example.bookstore.dto;
+package com.example.bookstore.dto.response;
 
 import com.example.bookstore.type.ResponseCode;
 import lombok.Getter;
@@ -11,10 +11,10 @@ import lombok.experimental.SuperBuilder;
 public class DataResponse extends BaseResponse{
     private Object data;
 
-    public static DataResponse response(final ResponseCode responseCode, final String message, final Object data) {
+    public static DataResponse response(ResponseCode responseCode, Object data) {
         return DataResponse.builder()
                 .responseCode(responseCode)
-                .message(message)
+                .message(responseCode.getMessage())
                 .data(data)
                 .build();
     }

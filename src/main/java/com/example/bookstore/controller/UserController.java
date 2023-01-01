@@ -1,6 +1,8 @@
 package com.example.bookstore.controller;
 
-import com.example.bookstore.dto.BaseResponse;
+import com.example.bookstore.dto.response.BaseResponse;
+import com.example.bookstore.dto.response.DataResponse;
+import com.example.bookstore.dto.UserLogin;
 import com.example.bookstore.dto.UserRegister;
 import com.example.bookstore.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +27,16 @@ public class UserController {
         return new ResponseEntity(response, HttpStatus.CREATED);
     }
 
-    @GetMapping("/register")
-    public ResponseEntity register() {
-        return new ResponseEntity(HttpStatus.OK);
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody @Valid UserLogin request) {
+        DataResponse response = userService.login(request);
+
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity test() {
+
+        return new ResponseEntity("response", HttpStatus.OK);
     }
 }

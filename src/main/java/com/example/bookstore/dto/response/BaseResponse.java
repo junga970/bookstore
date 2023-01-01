@@ -1,4 +1,4 @@
-package com.example.bookstore.dto;
+package com.example.bookstore.dto.response;
 
 import com.example.bookstore.type.ResponseCode;
 import lombok.Getter;
@@ -12,10 +12,10 @@ public class BaseResponse {
     private ResponseCode responseCode;
     private String message;
 
-    public static BaseResponse response(final ResponseCode responseCode, final String message) {
+    public static BaseResponse response(ResponseCode responseCode) {
         return BaseResponse.builder()
                 .responseCode(responseCode)
-                .message(message)
+                .message(responseCode.getMessage())
                 .build();
     }
 }
