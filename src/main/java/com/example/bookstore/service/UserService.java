@@ -1,7 +1,10 @@
 package com.example.bookstore.service;
 
+
 import com.example.bookstore.config.jwt.JwtTokenProvider;
-import com.example.bookstore.dto.*;
+import com.example.bookstore.dto.Token;
+import com.example.bookstore.dto.UserLogin;
+import com.example.bookstore.dto.UserRegister;
 import com.example.bookstore.dto.response.BaseResponse;
 import com.example.bookstore.dto.response.DataResponse;
 import com.example.bookstore.entity.User;
@@ -50,10 +53,10 @@ public class UserService {
 
     public DataResponse login(UserLogin request) {
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new CustomException(USER_NOT_FOUND, HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(INVALID_EMAIL, HttpStatus.UNAUTHORIZED));
 
         if(!passwordEncoder.matches(request.getPassword(), user.getPassword())){
-            throw new CustomException(INVALID_PASSWORD, HttpStatus.NOT_FOUND);
+            throw new CustomException(INVALID_PASSWORD, HttpStatus.UNAUTHORIZED);
         }
 
         List<String> roles = new ArrayList<>();

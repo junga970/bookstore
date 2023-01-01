@@ -1,14 +1,13 @@
 package com.example.bookstore.controller;
 
-import com.example.bookstore.dto.response.BaseResponse;
-import com.example.bookstore.dto.response.DataResponse;
 import com.example.bookstore.dto.UserLogin;
 import com.example.bookstore.dto.UserRegister;
+import com.example.bookstore.dto.response.BaseResponse;
+import com.example.bookstore.dto.response.DataResponse;
 import com.example.bookstore.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,11 +31,5 @@ public class UserController {
         DataResponse response = userService.login(request);
 
         return new ResponseEntity(response, HttpStatus.OK);
-    }
-
-    @GetMapping("/test")
-    public ResponseEntity test() {
-
-        return new ResponseEntity("response", HttpStatus.OK);
     }
 }

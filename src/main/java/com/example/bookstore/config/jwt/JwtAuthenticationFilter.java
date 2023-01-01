@@ -1,6 +1,7 @@
 package com.example.bookstore.config.jwt;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -29,7 +30,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-        } catch (SignatureException e) {
+        } catch (SignatureException | MalformedJwtException e) {
             request.setAttribute("errorCode", INVALID_TOKEN);
         } catch (ExpiredJwtException e) {
             request.setAttribute("errorCode", EXPIRED_TOKEN);
