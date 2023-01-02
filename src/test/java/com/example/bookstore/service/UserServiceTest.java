@@ -27,10 +27,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -38,8 +38,8 @@ class UserServiceTest {
 	@Mock
 	private JwtTokenProvider jwtTokenProvider;
 
-	@Mock
-	private PasswordEncoder passwordEncoder;
+	@Spy
+	private BCryptPasswordEncoder passwordEncoder;
 
 	@Mock
 	private UserRepository userRepository;
@@ -99,7 +99,8 @@ class UserServiceTest {
 	@DisplayName("로그인 성공")
 	void loginSuccess() {
 		// given
-		String encodingPassword = BCrypt.hashpw("test123!", BCrypt.gensalt());
+		String encodingPassword = passwordEncoder.encode("test123!");
+
 		User user = User.builder()
 			.name("이름원")
 			.email("test1@gmail.com")
@@ -149,7 +150,7 @@ class UserServiceTest {
 	@DisplayName("로그인 실패 - 잘못된 비밀번호")
 	void loginFailure_InvalidPassword() {
 		// given
-		String encodingPassword = BCrypt.hashpw("test123!", BCrypt.gensalt());
+		String encodingPassword = passwordEncoder.encode("test123!");
 		User user = User.builder()
 			.name("이름원")
 			.email("test1@gmail.com")
