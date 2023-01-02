@@ -13,20 +13,22 @@ import java.io.IOException;
 
 @Component()
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
-    @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
-            throws IOException, ServletException {
-        ErrorCode errorCode = (ErrorCode) request.getAttribute("errorCode");
-        setResponse(response, errorCode);
-    }
 
-    private void setResponse(HttpServletResponse response, ErrorCode errorCode) throws IOException {
-        response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+	@Override
+	public void commence(HttpServletRequest request, HttpServletResponse response,
+		AuthenticationException authException)
+		throws IOException, ServletException {
+		ErrorCode errorCode = (ErrorCode) request.getAttribute("errorCode");
+		setResponse(response, errorCode);
+	}
 
-        JSONObject responseJson = new JSONObject();
-        responseJson.put("errorCode", errorCode.toString());
-        responseJson.put("errorMessage", errorCode.getMessage());
-        response.getWriter().print(responseJson);
-    }
+	private void setResponse(HttpServletResponse response, ErrorCode errorCode) throws IOException {
+		response.setContentType("application/json;charset=UTF-8");
+		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+		JSONObject responseJson = new JSONObject();
+		responseJson.put("errorCode", errorCode.toString());
+		responseJson.put("errorMessage", errorCode.getMessage());
+		response.getWriter().print(responseJson);
+	}
 }

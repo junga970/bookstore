@@ -1,35 +1,42 @@
 package com.example.bookstore.controller;
 
+import static com.example.bookstore.type.ResponseCode.CREATE_USER;
+import static com.example.bookstore.type.ResponseCode.LOGIN_SUCCESSFUL;
+
+import com.example.bookstore.dto.Token;
 import com.example.bookstore.dto.UserLogin;
 import com.example.bookstore.dto.UserRegister;
-import com.example.bookstore.dto.response.BaseResponse;
-import com.example.bookstore.dto.response.DataResponse;
+import com.example.bookstore.dto.response.ApiResponse;
 import com.example.bookstore.service.UserService;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
 public class UserController {
-    private final UserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid UserRegister request) {
-        BaseResponse response = userService.register(request);
+	private final UserService userService;
 
-        return new ResponseEntity(response, HttpStatus.CREATED);
-    }
+	@PostMapping("/register")
+	@ResponseStatus(HttpStatus.CREATED)
+	public ApiResponse register(@RequestBody @Valid UserRegister request) {
 
-    @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid UserLogin request) {
-        DataResponse response = userService.login(request);
+		userService.register(request);
 
-        return new ResponseEntity(response, HttpStatus.OK);
-    }
+		return new ApiResponse(CREATE_USER);
+	}
+
+	@PostMapping("/login")
+	@ResponseStatus(HttpStatus.OK)
+	public ApiResponse<Token> login(@RequestBody @Valid UserLogin request) {
+
+		Token accessToken = userService.login(request);
+
+		return new ApiResponse(accessToken, LOGIN_SUCCESSFUL);
+	}
 }
