@@ -14,3 +14,7 @@ Spring:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
+
+jwt:
+  token:
+    secret-key: ENC(2d8GK4NebTSu0JbuLHwNbPicu4B4jigJ)
