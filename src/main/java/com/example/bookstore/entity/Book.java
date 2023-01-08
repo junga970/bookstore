@@ -30,7 +30,7 @@ public class Book extends BaseEntity {
 	private SubCategory subCategory;
 
 	private String title;
-	private String image;
+	private String imageUrl;
 	private String publisher;
 	private LocalDate publicationDate;
 

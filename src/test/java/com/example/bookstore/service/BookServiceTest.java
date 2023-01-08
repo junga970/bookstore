@@ -2,8 +2,8 @@ package com.example.bookstore.service;
 
 import static com.example.bookstore.type.ErrorCode.DOES_NOT_EXIST_SUB_CATEGORY_ID;
 import static com.example.bookstore.type.ErrorCode.INVALID_ORDER_VALUE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -21,6 +21,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 
 @ExtendWith(MockitoExtension.class)
@@ -52,12 +54,11 @@ public class BookServiceTest {
 		Long subCategoryId = 1L;
 		String orderValue = "bestseller";
 		Integer page = 0;
-		Integer size = 10;
 
-		List<Book> books = Arrays.asList(
+		List<Book> book_list = Arrays.asList(
 			Book.builder()
 				.title("테스트제목1")
-				.image(null)
+				.imageUrl(null)
 				.publisher(null)
 				.publicationDate(null)
 				.author(null)
@@ -66,7 +67,7 @@ public class BookServiceTest {
 				.build(),
 			Book.builder()
 				.title("테스트제목2")
-				.image(null)
+				.imageUrl(null)
 				.publisher(null)
 				.publicationDate(null)
 				.author(null)
@@ -75,7 +76,7 @@ public class BookServiceTest {
 				.build(),
 			Book.builder()
 				.title("테스트제목3")
-				.image(null)
+				.imageUrl(null)
 				.publisher(null)
 				.publicationDate(null)
 				.author(null)
@@ -84,21 +85,20 @@ public class BookServiceTest {
 				.build()
 		);
 
+		Page<Book> books = new PageImpl<>(book_list);
+
 		given(subCategoryRepository.existsById(anyLong())).willReturn(true);
 		given(bookRepository.findBySubCategoryId(anyLong(), any())).willReturn(books);
 
 		// when
-		List<BookInfo> bookInfos = bookService.getBooksByCategory(
-			subCategoryId,
-			orderValue,
-			page,
-			size
-		);
+		Page<BookInfo> bookInfos = bookService.getBooksByCategory(subCategoryId, orderValue, page);
 
 		// then
-		assertEquals("테스트제목1", bookInfos.get(0).getTitle());
-		assertEquals("테스트제목2", bookInfos.get(1).getTitle());
-		assertEquals("테스트제목3", bookInfos.get(2).getTitle());
+		assertEquals("테스트제목1", bookInfos.getContent().get(0).getTitle());
+		assertEquals("테스트제목2", bookInfos.getContent().get(1).getTitle());
+		assertEquals("테스트제목3", bookInfos.getContent().get(2).getTitle());
+		assertEquals(1, bookInfos.getTotalPages());
+		assertEquals(3, bookInfos.getTotalElements());
 	}
 
 	@Test
@@ -109,13 +109,12 @@ public class BookServiceTest {
 		Long subCategoryId = 100L;
 		String orderValue = "bestseller";
 		Integer page = 0;
-		Integer size = 10;
 
 		given(subCategoryRepository.existsById(anyLong())).willReturn(false);
 
 		// when
 		CustomException exception = assertThrows(CustomException.class,
-			() -> bookService.getBooksByCategory(subCategoryId, orderValue, page, size));
+			() -> bookService.getBooksByCategory(subCategoryId, orderValue, page));
 
 		// then
 		assertEquals(DOES_NOT_EXIST_SUB_CATEGORY_ID, exception.getErrorCode());
@@ -130,13 +129,12 @@ public class BookServiceTest {
 		Long subCategoryId = 1L;
 		String orderValue = "TEST";
 		Integer page = 0;
-		Integer size = 10;
 
 		given(subCategoryRepository.existsById(anyLong())).willReturn(true);
 
 		// when
 		CustomException exception = assertThrows(CustomException.class,
-			() -> bookService.getBooksByCategory(subCategoryId, orderValue, page, size));
+			() -> bookService.getBooksByCategory(subCategoryId, orderValue, page));
 
 		// then
 		assertEquals(INVALID_ORDER_VALUE, exception.getErrorCode());

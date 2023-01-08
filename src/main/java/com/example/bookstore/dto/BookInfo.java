@@ -18,7 +18,7 @@ import lombok.Setter;
 public class BookInfo {
 
 	private String title;
-	private String image;
+	private String imageUrl;
 	private String publisher;
 	private LocalDate publicationDate;
 	private Map<String, List<String>> author;
@@ -29,7 +29,7 @@ public class BookInfo {
 
 		return BookInfo.builder()
 			.title(book.getTitle())
-			.image(book.getImage())
+			.imageUrl(book.getImageUrl())
 			.publisher(book.getPublisher())
 			.publicationDate(book.getPublicationDate())
 			.author(book.getAuthor())

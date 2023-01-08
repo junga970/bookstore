@@ -15,6 +15,7 @@ public enum ErrorCode {
 	INVALID_PASSWORD("잘못된 비밀번호입니다."),
 	INVALID_EMAIL("잘못된 이메일입니다."),
 	INVALID_ORDER_VALUE("잘못된 정렬 값입니다."),
+	INVALID_ORDER_PROPERTY("Order 의 order 속성 값이 잘못됐습니다. (서버 측 오류)"),
 	DOES_NOT_EXIST_SUB_CATEGORY_ID("존재하지 않는 서브카테고리입니다.");
 
 	private final String message;
