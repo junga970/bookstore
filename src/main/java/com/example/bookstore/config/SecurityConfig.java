@@ -39,10 +39,13 @@ public class SecurityConfig {
         http.httpBasic().disable()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/register", "/login", "/books").permitAll()
+                .antMatchers("/register", "/login", "/books", "/search").permitAll()
                 .anyRequest().authenticated();
 
-        http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(
+            new JwtAuthenticationFilter(jwtTokenProvider),
+            UsernamePasswordAuthenticationFilter.class
+        );
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
