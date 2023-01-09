@@ -3,7 +3,6 @@ package com.example.bookstore.dto;
 import com.example.bookstore.entity.Book;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +20,7 @@ public class BookInfo {
 	private String imageUrl;
 	private String publisher;
 	private LocalDate publicationDate;
-	private Map<String, List<String>> author;
+	private List<String> authors;
 	private Integer price;
 	private Integer discountPrice;
 
@@ -32,7 +31,7 @@ public class BookInfo {
 			.imageUrl(book.getImageUrl())
 			.publisher(book.getPublisher())
 			.publicationDate(book.getPublicationDate())
-			.author(book.getAuthor())
+			.authors(book.getAuthors())
 			.price(book.getPrice())
 			.discountPrice(book.getDiscountPrice())
 			.build();

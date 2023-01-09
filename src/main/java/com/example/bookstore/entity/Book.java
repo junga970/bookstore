@@ -3,7 +3,6 @@ package com.example.bookstore.entity;
 import com.vladmihalcea.hibernate.type.json.JsonType;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -36,7 +35,7 @@ public class Book extends BaseEntity {
 
 	@Type(type = "json")
 	@Column(columnDefinition = "json")
-	private Map<String, List<String>> author;
+	private List<String> authors;
 
 	private Integer price;
 	private Integer discountPrice;
