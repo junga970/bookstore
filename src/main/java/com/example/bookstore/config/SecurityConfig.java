@@ -28,7 +28,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+    public AuthenticationManager authenticationManager(
+        AuthenticationConfiguration authenticationConfiguration)
             throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
@@ -38,7 +39,7 @@ public class SecurityConfig {
         http.httpBasic().disable()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/register", "/login").permitAll()
+                .antMatchers("/register", "/login", "/books").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
