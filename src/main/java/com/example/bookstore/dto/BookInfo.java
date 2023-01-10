@@ -1,6 +1,7 @@
 package com.example.bookstore.dto;
 
 import com.example.bookstore.entity.Book;
+import com.example.bookstore.entity.BookDocument;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,7 @@ import lombok.Setter;
 @Builder
 public class BookInfo {
 
+	private Long id;
 	private String title;
 	private String imageUrl;
 	private String publisher;
@@ -27,6 +29,7 @@ public class BookInfo {
 	public static BookInfo fromEntity(Book book) {
 
 		return BookInfo.builder()
+			.id(book.getId())
 			.title(book.getTitle())
 			.imageUrl(book.getImageUrl())
 			.publisher(book.getPublisher())
@@ -34,6 +37,20 @@ public class BookInfo {
 			.authors(book.getAuthors())
 			.price(book.getPrice())
 			.discountPrice(book.getDiscountPrice())
+			.build();
+	}
+
+	public static BookInfo fromDocument(BookDocument bookDocument) {
+
+		return BookInfo.builder()
+			.id(bookDocument.getId())
+			.title(bookDocument.getTitle())
+			.imageUrl(bookDocument.getImageUrl())
+			.publisher(bookDocument.getPublisher())
+			.publicationDate(bookDocument.getPublicationDate())
+			.authors(bookDocument.getAuthors())
+			.price(bookDocument.getPrice())
+			.discountPrice(bookDocument.getDiscountPrice())
 			.build();
 	}
 }

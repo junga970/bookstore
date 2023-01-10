@@ -6,8 +6,10 @@ import static com.example.bookstore.type.ErrorCode.INVALID_ORDER_VALUE;
 
 import com.example.bookstore.dto.BookInfo;
 import com.example.bookstore.entity.Book;
+import com.example.bookstore.entity.BookDocument;
 import com.example.bookstore.exception.CustomException;
 import com.example.bookstore.repository.BookRepository;
+import com.example.bookstore.repository.BookSearchRepository;
 import com.example.bookstore.repository.SubCategoryRepository;
 import com.example.bookstore.type.Order;
 import java.util.Arrays;
@@ -26,6 +28,7 @@ public class BookService {
 
 	private final SubCategoryRepository subCategoryRepository;
 	private final BookRepository bookRepository;
+	private final BookSearchRepository bookSearchRepository;
 
 	private final int SIZE = 10;
 
@@ -54,5 +57,13 @@ public class BookService {
 		Page<Book> books = bookRepository.findBySubCategoryId(subCategoryId, pageable);
 
 		return books.map(BookInfo::fromEntity);
+	}
+
+	public Page<BookInfo> searchBooks(String keyword, Integer page) {
+
+		Pageable pageable = PageRequest.of(page, SIZE);
+		Page<BookDocument> books = bookSearchRepository.findByTitleOrAuthors(keyword, keyword, pageable);
+
+		return books.map(BookInfo::fromDocument);
 	}
 }

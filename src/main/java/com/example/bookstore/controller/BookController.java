@@ -29,4 +29,15 @@ public class BookController {
 
 		return new ApiResponse(pageInfo, ResponseCode.GET_BOOKS);
 	}
+
+	@GetMapping("/search")
+	@ResponseStatus(HttpStatus.OK)
+	public ApiResponse<Page<BookInfo>> searchBooks(
+		@RequestParam(defaultValue = "") String keyword,
+		@RequestParam(defaultValue = "0") Integer page) {
+
+		Page<BookInfo> pageInfo = bookService.searchBooks(keyword, page);
+
+		return new ApiResponse(pageInfo, ResponseCode.SEARCH_BOOKS);
+	}
 }
