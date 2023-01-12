@@ -7,14 +7,13 @@ import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.example.bookstore.dto.CartItemInfo;
 import com.example.bookstore.entity.Book;
-import com.example.bookstore.entity.Cart;
+import com.example.bookstore.entity.CartItem;
 import com.example.bookstore.entity.User;
 import com.example.bookstore.exception.CustomException;
 import com.example.bookstore.repository.BookRepository;
@@ -32,7 +31,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 @ExtendWith(MockitoExtension.class)
-public class CartServiceTest {
+public class CartItemServiceTest {
 
 	@Mock
 	private UserRepository userRepository;
@@ -65,17 +64,17 @@ public class CartServiceTest {
 
 		Integer quantity = 10;
 
-		given(userRepository.findByEmail(anyString())).willReturn(Optional.of(user));
+		given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 		given(bookRepository.findById(anyLong())).willReturn(Optional.of(book));
-		given(cartRepository.findByUserAndBookId(any(), anyLong())).willReturn(Optional.empty());
+		given(cartRepository.findByUserIdAndBookId(any(), anyLong())).willReturn(Optional.empty());
 
 		// when
-		cartService.addBookToCart(user.getEmail(), book.getId(), quantity);
+		cartService.addBookToCart(user.getId(), book.getId(), quantity);
 
 		// then
-		verify(userRepository, times(1)).findByEmail(anyString());
+		verify(userRepository, times(1)).findById(anyLong());
 		verify(bookRepository, times(1)).findById(anyLong());
-		verify(cartRepository, times(1)).findByUserAndBookId(any(), anyLong());
+		verify(cartRepository, times(1)).findByUserIdAndBookId(anyLong(), anyLong());
 		verify(cartRepository, times(1)).save(any());
 	}
 
@@ -93,7 +92,7 @@ public class CartServiceTest {
 			.build();
 		book.setId(10L);
 
-		Cart cartItem = Cart.builder()
+		CartItem cartItem = CartItem.builder()
 			.user(user)
 			.book(book)
 			.quantity(5)
@@ -101,13 +100,13 @@ public class CartServiceTest {
 
 		Integer quantity = 10;
 
-		given(userRepository.findByEmail(anyString())).willReturn(Optional.of(user));
+		given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 		given(bookRepository.findById(anyLong())).willReturn(Optional.of(book));
-		given(cartRepository.findByUserAndBookId(any(), anyLong())).willReturn(
+		given(cartRepository.findByUserIdAndBookId(anyLong(), anyLong())).willReturn(
 			Optional.of(cartItem));
 
 		// when
-		cartService.addBookToCart(user.getEmail(), book.getId(), quantity);
+		cartService.addBookToCart(user.getId(), book.getId(), quantity);
 
 		// then
 		assertEquals((Integer) 15, cartItem.getQuantity());
@@ -125,12 +124,12 @@ public class CartServiceTest {
 		Long bookId = 10L;
 		Integer quantity = 10;
 
-		given(userRepository.findByEmail(anyString())).willReturn(Optional.of(user));
+		given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 		given(bookRepository.findById(anyLong())).willReturn(Optional.empty());
 
 		// when
 		CustomException exception = assertThrows(CustomException.class,
-			() -> cartService.addBookToCart(user.getEmail(), bookId, quantity));
+			() -> cartService.addBookToCart(user.getId(), bookId, quantity));
 
 		// then
 		assertEquals(DOES_NOT_EXIST_BOOK_ID, exception.getErrorCode());
@@ -161,29 +160,28 @@ public class CartServiceTest {
 			.discountPrice(3000)
 			.build();
 
-		List<Cart> cartList = Arrays.asList(
-			Cart.builder()
+		List<CartItem> cartItemList = Arrays.asList(
+			CartItem.builder()
 				.user(user)
 				.book(book1)
 				.quantity(5)
 				.build(),
-			Cart.builder()
+			CartItem.builder()
 				.user(user)
 				.book(book2)
 				.quantity(5)
 				.build(),
-			Cart.builder()
+			CartItem.builder()
 				.user(user)
 				.book(book3)
 				.quantity(5)
 				.build()
 		);
 
-		given(userRepository.findByEmail(anyString())).willReturn(Optional.of(user));
-		given(cartRepository.findAllByUser(any())).willReturn(cartList);
+		given(cartRepository.findAllByUserId(anyLong())).willReturn(cartItemList);
 
 		// when
-		List<CartItemInfo> cart = cartService.getCart(user.getEmail());
+		List<CartItemInfo> cart = cartService.getCart(user.getId());
 
 		// then
 		assertEquals("자바 스프링1", cart.get(0).getBookInfo().getTitle());
@@ -217,7 +215,7 @@ public class CartServiceTest {
 			.build();
 		book.setId(10L);
 
-		Cart cartItem = Cart.builder()
+		CartItem cartItem = CartItem.builder()
 			.user(user)
 			.book(book)
 			.quantity(5)
@@ -225,11 +223,10 @@ public class CartServiceTest {
 
 		Integer quantity = 10;
 
-		given(userRepository.findByEmail(anyString())).willReturn(Optional.of(user));
-		given(cartRepository.findByUserAndBookId(any(), anyLong())).willReturn(Optional.of(cartItem));
+		given(cartRepository.findByUserIdAndBookId(anyLong(), anyLong())).willReturn(Optional.of(cartItem));
 
 		// when
-		cartService.updateQuantityOfBookInCart(user.getEmail(), book.getId(), quantity);
+		cartService.updateQuantityOfBookInCart(user.getId(), book.getId(), quantity);
 
 		// then
 		assertEquals((Integer) 10, cartItem.getQuantity());
@@ -247,12 +244,11 @@ public class CartServiceTest {
 		Long bookId = 10L;
 		Integer quantity = 10;
 
-		given(userRepository.findByEmail(anyString())).willReturn(Optional.of(user));
-		given(cartRepository.findByUserAndBookId(any(), anyLong())).willReturn(Optional.empty());
+		given(cartRepository.findByUserIdAndBookId(anyLong(), anyLong())).willReturn(Optional.empty());
 
 		// when
 		CustomException exception = assertThrows(CustomException.class,
-			() -> cartService.updateQuantityOfBookInCart(user.getEmail(), bookId, quantity));
+			() -> cartService.updateQuantityOfBookInCart(user.getId(), bookId, quantity));
 
 		// then
 		assertEquals(DOES_NOT_EXIST_CART_ITEM_ID, exception.getErrorCode());
@@ -274,7 +270,7 @@ public class CartServiceTest {
 			.build();
 		book.setId(10L);
 
-		Cart cartItem = Cart.builder()
+		CartItem cartItem = CartItem.builder()
 			.user(user)
 			.book(book)
 			.quantity(5)
@@ -282,15 +278,13 @@ public class CartServiceTest {
 
 		Integer quantity = 10;
 
-		given(userRepository.findByEmail(anyString())).willReturn(Optional.of(user));
-		given(cartRepository.findByUserAndBookId(any(), anyLong())).willReturn(Optional.of(cartItem));
+		given(cartRepository.findByUserIdAndBookId(anyLong(), anyLong())).willReturn(Optional.of(cartItem));
 
 		// when
-		cartService.DeleteBookInCart(user.getEmail(), book.getId());
+		cartService.deleteBookInCart(user.getId(), book.getId());
 
 		// then
-		verify(userRepository, times(1)).findByEmail(anyString());
-		verify(cartRepository, times(1)).findByUserAndBookId(any(), anyLong());
+		verify(cartRepository, times(1)).findByUserIdAndBookId(anyLong(), anyLong());
 		verify(cartRepository, times(1)).delete(any());
 	}
 
@@ -300,6 +294,7 @@ public class CartServiceTest {
 		User user = User.builder()
 			.email("user@test.com")
 			.build();
+		user.setId(1L);
 
 		Book book1 = Book.builder()
 			.title("자바 스프링1")
@@ -316,18 +311,18 @@ public class CartServiceTest {
 			.discountPrice(3000)
 			.build();
 
-		List<Cart> cartList = Arrays.asList(
-			Cart.builder()
+		List<CartItem> cartItemList = Arrays.asList(
+			CartItem.builder()
 				.user(user)
 				.book(book1)
 				.quantity(5)
 				.build(),
-			Cart.builder()
+			CartItem.builder()
 				.user(user)
 				.book(book2)
 				.quantity(5)
 				.build(),
-			Cart.builder()
+			CartItem.builder()
 				.user(user)
 				.book(book3)
 				.quantity(5)
@@ -336,15 +331,13 @@ public class CartServiceTest {
 
 		Integer quantity = 10;
 
-		given(userRepository.findByEmail(anyString())).willReturn(Optional.of(user));
-		given(cartRepository.findAllByUser(any())).willReturn(cartList);
+		given(cartRepository.findAllByUserId(anyLong())).willReturn(cartItemList);
 
 		// when
-		cartService.DeleteCart(user.getEmail());
+		cartService.deleteCart(user.getId());
 
 		// then
-		verify(userRepository, times(1)).findByEmail(anyString());
-		verify(cartRepository, times(1)).findAllByUser(any());
+		verify(cartRepository, times(1)).findAllByUserId(anyLong());
 		verify(cartRepository, times(1)).deleteAll(anyList());
 	}
 }

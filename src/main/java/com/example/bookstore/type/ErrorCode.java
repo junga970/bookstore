@@ -11,6 +11,7 @@ public enum ErrorCode {
 	METHOD_ARGUMENT_TYPE_MISMATCH("파라미터 타입 불일치"),
 	HTTP_MASSAGE_NOT_READABLE_EXCEPTION("잘못된 JSON 형식입니다."),
 	EMAIL_ALREADY_EXISTS("이미 가입된 이메일입니다."),
+	USER_NOT_FOUND("유저를 찾을 수 없습니다."),
 	EXPIRED_TOKEN("만료된 토큰입니다."),
 	INVALID_TOKEN("유효하지 않은 토큰입니다."),
 	INVALID_PASSWORD("잘못된 비밀번호입니다."),

@@ -40,10 +40,10 @@ public class CartController {
 		@PathVariable Long bookId,
 		@RequestBody @Valid CartQuantity request) {
 
-		String userEmail = user.getUsername();
+		Long userId = Long.parseLong(user.getUsername());
 		Integer quantity = request.getQuantity();
 
-		cartService.addBookToCart(userEmail, bookId, quantity);
+		cartService.addBookToCart(userId, bookId, quantity);
 
 		return new ApiResponse(ADD_BOOK_TO_CART);
 	}
@@ -55,22 +55,22 @@ public class CartController {
 		@PathVariable Long bookId,
 		@RequestBody @Valid CartQuantity request) {
 
-		String userEmail = user.getUsername();
+		Long userId = Long.parseLong(user.getUsername());
 		Integer quantity = request.getQuantity();
 
-		cartService.updateQuantityOfBookInCart(userEmail, bookId, quantity);
+		cartService.updateQuantityOfBookInCart(userId, bookId, quantity);
 
 		return new ApiResponse(UPDATE_QUANTITY_OF_BOOK_IN_CART);
 	}
 
 	@DeleteMapping("/{bookId}")
 	@ResponseStatus(HttpStatus.OK)
-	public ApiResponse DeleteBookInCart(
+	public ApiResponse deleteBookInCart(
 		@AuthenticationPrincipal UserDetails user, @PathVariable Long bookId) {
 
-		String userEmail = user.getUsername();
+		Long userId = Long.parseLong(user.getUsername());
 
-		cartService.DeleteBookInCart(userEmail, bookId);
+		cartService.deleteBookInCart(userId, bookId);
 
 		return new ApiResponse(DELETE_BOOK_IN_CART);
 	}
@@ -79,20 +79,20 @@ public class CartController {
 	@ResponseStatus(HttpStatus.OK)
 	public ApiResponse<List<CartItemInfo>> getCart(@AuthenticationPrincipal UserDetails user) {
 
-		String userEmail = user.getUsername();
+		Long userId = Long.parseLong(user.getUsername());
 
-		List<CartItemInfo> cart = cartService.getCart(userEmail);
+		List<CartItemInfo> cart = cartService.getCart(userId);
 
 		return new ApiResponse(cart, GET_CART);
 	}
 
 	@DeleteMapping()
 	@ResponseStatus(HttpStatus.OK)
-	public ApiResponse DeleteCart(@AuthenticationPrincipal UserDetails user) {
+	public ApiResponse deleteCart(@AuthenticationPrincipal UserDetails user) {
 
-		String userEmail = user.getUsername();
+		Long userId = Long.parseLong(user.getUsername());
 
-		cartService.DeleteCart(userEmail);
+		cartService.deleteCart(userId);
 
 		return new ApiResponse(DELETE_CART);
 	}

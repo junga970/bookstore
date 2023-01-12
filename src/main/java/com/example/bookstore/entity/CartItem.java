@@ -15,7 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 @Entity
-public class Cart extends BaseEntity {
+public class CartItem extends BaseEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "book_id")

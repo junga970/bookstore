@@ -3,17 +3,17 @@ package com.example.bookstore.service;
 
 import static com.example.bookstore.type.ErrorCode.DOES_NOT_EXIST_BOOK_ID;
 import static com.example.bookstore.type.ErrorCode.DOES_NOT_EXIST_CART_ITEM_ID;
+import static com.example.bookstore.type.ErrorCode.USER_NOT_FOUND;
 
 import com.example.bookstore.dto.CartItemInfo;
 import com.example.bookstore.entity.Book;
-import com.example.bookstore.entity.Cart;
+import com.example.bookstore.entity.CartItem;
 import com.example.bookstore.entity.User;
 import com.example.bookstore.exception.CustomException;
 import com.example.bookstore.repository.BookRepository;
 import com.example.bookstore.repository.CartRepository;
 import com.example.bookstore.repository.UserRepository;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,63 +29,55 @@ public class CartService {
 	private final BookRepository bookRepository;
 	private final CartRepository cartRepository;
 
-	public void addBookToCart(String userEmail, Long bookId, Integer quantity) {
+	public void addBookToCart(Long userId, Long bookId, Integer quantity) {
 
-		User user = userRepository.findByEmail(userEmail).get();
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new CustomException(USER_NOT_FOUND, HttpStatus.NOT_FOUND));
 
 		Book book = bookRepository.findById(bookId)
 			.orElseThrow(() -> new CustomException(DOES_NOT_EXIST_BOOK_ID, HttpStatus.NOT_FOUND));
 
-		Optional<Cart> optionalCartItem = cartRepository.findByUserAndBookId(user, bookId);
-		Cart cartItem;
-		if (optionalCartItem.isPresent()) {
-			cartItem = optionalCartItem.get();
-			cartItem.setQuantity(cartItem.getQuantity() + quantity);
-		} else {
-			cartItem = Cart.builder()
+		cartRepository.findByUserIdAndBookId(userId, bookId).ifPresentOrElse(
+			cartItem -> {
+				cartItem.setQuantity(cartItem.getQuantity() + quantity);
+				cartRepository.save(cartItem);
+			},
+			() -> cartRepository.save(CartItem.builder()
 				.user(user)
 				.book(book)
 				.quantity(quantity)
-				.build();
-		}
-
-		cartRepository.save(cartItem);
+				.build())
+		);
 	}
 
-	public List<CartItemInfo> getCart(String userEmail) {
+	public List<CartItemInfo> getCart(Long userId) {
 
-		User user = userRepository.findByEmail(userEmail).get();
-		List<Cart> cart = cartRepository.findAllByUser(user);
+		List<CartItem> cartItem = cartRepository.findAllByUserId(userId);
 
-		return cart.stream().map(CartItemInfo::fromEntity).collect(Collectors.toList());
+		return cartItem.stream().map(CartItemInfo::fromEntity).collect(Collectors.toList());
 	}
 
-	public void updateQuantityOfBookInCart(String userEmail, Long bookId, Integer quantity) {
+	public void updateQuantityOfBookInCart(Long userId, Long bookId, Integer quantity) {
 
-		User user = userRepository.findByEmail(userEmail).get();
-
-		Cart cartItem = cartRepository.findByUserAndBookId(user, bookId)
+		CartItem cartItem = cartRepository.findByUserIdAndBookId(userId, bookId)
 			.orElseThrow(() -> new CustomException(DOES_NOT_EXIST_CART_ITEM_ID, HttpStatus.NOT_FOUND));
 
 		cartItem.setQuantity(quantity);
 		cartRepository.save(cartItem);
 	}
 
-	public void DeleteBookInCart(String userEmail, Long bookId) {
+	public void deleteBookInCart(Long userId, Long bookId) {
 
-		User user = userRepository.findByEmail(userEmail).get();
-
-		Cart cartItem = cartRepository.findByUserAndBookId(user, bookId)
+		CartItem cartItem = cartRepository.findByUserIdAndBookId(userId, bookId)
 			.orElseThrow(() -> new CustomException(DOES_NOT_EXIST_CART_ITEM_ID, HttpStatus.NOT_FOUND));
 
 		cartRepository.delete(cartItem);
 	}
 
-	public void DeleteCart(String userEmail) {
+	public void deleteCart(Long userId) {
 
-		User user = userRepository.findByEmail(userEmail).get();
-		List<Cart> cart = cartRepository.findAllByUser(user);
+		List<CartItem> cartItem = cartRepository.findAllByUserId(userId);
 
-		cartRepository.deleteAll(cart);
+		cartRepository.deleteAll(cartItem);
 	}
 }

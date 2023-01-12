@@ -1,16 +1,15 @@
 package com.example.bookstore.repository;
 
-import com.example.bookstore.entity.Cart;
-import com.example.bookstore.entity.User;
+import com.example.bookstore.entity.CartItem;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CartRepository extends JpaRepository<Cart, Long> {
+public interface CartRepository extends JpaRepository<CartItem, Long> {
 
-	List<Cart> findAllByUser(User user);
+	List<CartItem> findAllByUserId(Long userId);
 
-	Optional<Cart> findByUserAndBookId(User user, Long bookId);
+	Optional<CartItem> findByUserIdAndBookId(Long userId, Long bookId);
 }

@@ -1,6 +1,6 @@
 package com.example.bookstore.dto;
 
-import com.example.bookstore.entity.Cart;
+import com.example.bookstore.entity.CartItem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,10 +18,10 @@ public class CartItemInfo {
 	private Integer quantity;
 	private Integer totalPrice;
 
-	public static CartItemInfo fromEntity(Cart cart) {
+	public static CartItemInfo fromEntity(CartItem cartItem) {
 
-		BookInfo bookInfo = BookInfo.fromEntity(cart.getBook());
-		Integer quantity = cart.getQuantity();
+		BookInfo bookInfo = BookInfo.fromEntity(cartItem.getBook());
+		Integer quantity = cartItem.getQuantity();
 
 		return CartItemInfo.builder()
 			.bookInfo(bookInfo)
