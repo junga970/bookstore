@@ -2,6 +2,7 @@ package com.example.bookstore.config.jwt;
 
 import com.example.bookstore.type.ErrorCode;
 import org.json.simple.JSONObject;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -15,16 +16,22 @@ import java.io.IOException;
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
 	@Override
-	public void commence(HttpServletRequest request, HttpServletResponse response,
+	public void commence(
+		HttpServletRequest request,
+		HttpServletResponse response,
 		AuthenticationException authException)
 		throws IOException, ServletException {
+
 		ErrorCode errorCode = (ErrorCode) request.getAttribute("errorCode");
-		setResponse(response, errorCode);
+		HttpStatus httpStatus = (HttpStatus) request.getAttribute("httpStatus");
+		setResponse(response, errorCode, httpStatus);
 	}
 
-	private void setResponse(HttpServletResponse response, ErrorCode errorCode) throws IOException {
+	private void setResponse(HttpServletResponse response, ErrorCode errorCode, HttpStatus httpStatus)
+		throws IOException {
+
 		response.setContentType("application/json;charset=UTF-8");
-		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		response.setStatus(httpStatus.value());
 
 		JSONObject responseJson = new JSONObject();
 		responseJson.put("errorCode", errorCode.toString());

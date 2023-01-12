@@ -1,23 +1,26 @@
 package com.example.bookstore.config.jwt;
 
+import static com.example.bookstore.type.ErrorCode.USER_NOT_FOUND;
+
 import com.example.bookstore.dto.Token;
+import com.example.bookstore.exception.CustomException;
+import com.example.bookstore.repository.UserRepository;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import java.util.Base64;
+import java.util.Date;
+import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Component
@@ -27,6 +30,7 @@ public class JwtTokenProvider {
 
     private final long tokenValidTime = 30 * 60 * 1000L;
     private final UserDetailsService userDetailsService;
+    private final UserRepository userRepository;
 
     @PostConstruct
     protected void init() {
@@ -62,7 +66,12 @@ public class JwtTokenProvider {
     }
 
     public boolean validateToken(String jwtToken) {
-        Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
-        return claims.getBody().getExpiration().after(new Date());
+        Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken).getBody();
+
+        String email = claims.getSubject();
+        userRepository.findByEmail(email)
+            .orElseThrow(() -> new CustomException(USER_NOT_FOUND, HttpStatus.NOT_FOUND));
+
+        return claims.getExpiration().after(new Date());
     }
 }
