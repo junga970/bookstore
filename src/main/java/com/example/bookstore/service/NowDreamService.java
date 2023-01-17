@@ -158,8 +158,6 @@ public class NowDreamService {
 
 			String key = createKey(storeId, book.getId());
 
-			redissonClient.getBucket(key).set(100);
-
 			int stock = (int) redissonClient.getBucket(key).get();
 
 			if (stock - quantity < EMPTY) {

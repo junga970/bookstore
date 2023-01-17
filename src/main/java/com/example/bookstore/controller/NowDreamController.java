@@ -30,7 +30,7 @@ public class NowDreamController {
 
 	@PostMapping("/{storeId}")
 	@ResponseStatus(HttpStatus.OK)
-	public ApiResponse OrderByNowDream(
+	public ApiResponse orderByNowDream(
 		@AuthenticationPrincipal UserDetails user,
 		@PathVariable Long storeId,
 		@RequestBody @Valid NowDreamCartItemIds request) {

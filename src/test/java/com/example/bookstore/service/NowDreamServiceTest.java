@@ -16,6 +16,7 @@ import com.example.bookstore.dto.NowDreamCartItemIds;
 import com.example.bookstore.dto.NowDreamStock;
 import com.example.bookstore.entity.Book;
 import com.example.bookstore.entity.CartItem;
+import com.example.bookstore.entity.OrderInfo;
 import com.example.bookstore.entity.Store;
 import com.example.bookstore.entity.User;
 import com.example.bookstore.exception.CustomException;
@@ -99,9 +100,14 @@ public class NowDreamServiceTest {
 			.quantity(1)
 			.build();
 
+		OrderInfo orderInfo = OrderInfo.builder()
+			.id("dasdsfaadsf1289378943718597")
+			.build();
+
 		given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 		given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
 		given(orderInfoRepository.existsById(anyString())).willReturn(false);
+		given(orderInfoRepository.findById(anyString())).willReturn(Optional.of(orderInfo));
 		given(redissonClient.getLock(anyString())).willReturn(lock);
 		given(lock.tryLock(anyLong(), anyLong(), any())).willReturn(true);
 		given(cartItemRepository.findById(anyLong())).willReturn(Optional.of(cartItem));
@@ -119,6 +125,7 @@ public class NowDreamServiceTest {
 		verify(userRepository, times(1)).findById(anyLong());
 		verify(storeRepository, times(1)).findById(anyLong());
 		verify(orderInfoRepository, times(1)).existsById(anyString());
+		verify(orderInfoRepository, times(1)).findById(anyString());
 		verify(orderInfoRepository, times(1)).save(any());
 		verify(cartItemRepository, times(1)).findById(anyLong());
 		verify(cartItemRepository, times(1)).deleteById(anyLong());
@@ -156,9 +163,14 @@ public class NowDreamServiceTest {
 			.quantity(1)
 			.build();
 
+		OrderInfo orderInfo = OrderInfo.builder()
+			.id("dasdsfaadsf1289378943718597")
+			.build();
+
 		given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 		given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
 		given(orderInfoRepository.existsById(anyString())).willReturn(false);
+		given(orderInfoRepository.findById(anyString())).willReturn(Optional.of(orderInfo));
 		given(redissonClient.getLock(anyString())).willReturn(lock);
 		given(lock.tryLock(anyLong(), anyLong(), any())).willReturn(true);
 		given(cartItemRepository.findById(anyLong())).willReturn(Optional.of(cartItem));
