@@ -21,6 +21,11 @@ public class OrderBook extends BaseEntity {
 	@JoinColumn(name = "book_id")
 	private Book book;
 
+
+	@ManyToOne
+	@JoinColumn(name = "order_info_id")
+	private OrderInfo orderInfo;
+
 	private Integer quantity;
 	private Integer price;
 }

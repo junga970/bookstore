@@ -39,7 +39,13 @@ public class SecurityConfig {
         http.httpBasic().disable()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/register", "/login", "/books", "/search").permitAll()
+                .antMatchers(
+                    "/register",
+                    "/login",
+                    "/books",
+                    "/search",
+                    "/now-dream/stock/**"
+                ).permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(

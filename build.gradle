@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.7'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'jacoco'
 }
 
 group = 'com.example'
@@ -14,11 +15,17 @@ configurations {
 	}
 }
 
+jacoco {
+	toolVersion = "0.8.7"
+	reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
+}
+
 repositories {
 	mavenCentral()
 }
 
 dependencies {
+	implementation 'org.redisson:redisson-spring-data-27:3.19.1'
 	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -34,6 +41,40 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+}
+
+jacocoTestReport {
+	reports {
+		xml.required = false
+		csv.required = false
+		html.required = true
+	}
+}
+test {
+	// finalizedBy : 이(test) 작업에 대해 주어진 종료자 작업을 추가
+	finalizedBy jacocoTestReport // test 작업이 끝나고 jacocoTestReport를 실행
+	useJUnitPlatform()
+}
+jacocoTestReport {
+	// dependsOn : 이 작업에 지정된 종속성을 추가
+	dependsOn test // jacocoTestReport 에 test라는 종속성을 추가
+	finalizedBy 'jacocoTestCoverageVerification'
+}
+
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			enabled = true;
+			element = 'SOURCEFILE'
+
+			limit {
+				counter = 'METHOD'
+				value = 'COVEREDRATIO'
+				minimum = 0.5
+			}
+		}
+
+	}
 }
 
 tasks.named('test') {

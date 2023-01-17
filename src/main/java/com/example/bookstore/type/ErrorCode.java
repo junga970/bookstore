@@ -20,7 +20,11 @@ public enum ErrorCode {
 	INVALID_ORDER_PROPERTY("Order 의 order 속성 값이 잘못됐습니다. (서버 측 오류)"),
 	DOES_NOT_EXIST_SUB_CATEGORY_ID("존재하지 않는 서브카테고리입니다."),
 	DOES_NOT_EXIST_BOOK_ID("존재하지 않는 도서입니다."),
-	DOES_NOT_EXIST_CART_ITEM_ID("존재하지 않는 장바구니 상품입니다.");
+	DOES_NOT_EXIST_CART_ITEM_ID("존재하지 않는 장바구니 상품입니다."),
+	DOES_NOT_EXIST_STORE_ID("존재하지 않는 스토어입니다."),
+	DOES_NOT_EXIST_ORDER_INFO_ID("존재하지 않는 주문입니다."),
+	SOLD_OUT("품절인 상품이 있습니다."),
+	FAILED_TO_ACQUIRE_LOCK("lock 획득 실패");
 
 	private final String message;
 }
