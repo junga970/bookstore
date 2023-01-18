@@ -17,7 +17,7 @@ import com.example.bookstore.entity.CartItem;
 import com.example.bookstore.entity.User;
 import com.example.bookstore.exception.CustomException;
 import com.example.bookstore.repository.BookRepository;
-import com.example.bookstore.repository.CartRepository;
+import com.example.bookstore.repository.CartItemRepository;
 import com.example.bookstore.repository.UserRepository;
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +40,7 @@ public class CartItemServiceTest {
 	private BookRepository bookRepository;
 
 	@Mock
-	private CartRepository cartRepository;
+	private CartItemRepository cartItemRepository;
 
 	@InjectMocks
 	private CartService cartService;
@@ -66,7 +66,7 @@ public class CartItemServiceTest {
 
 		given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 		given(bookRepository.findById(anyLong())).willReturn(Optional.of(book));
-		given(cartRepository.findByUserIdAndBookId(any(), anyLong())).willReturn(Optional.empty());
+		given(cartItemRepository.findByUserIdAndBookId(any(), anyLong())).willReturn(Optional.empty());
 
 		// when
 		cartService.addBookToCart(user.getId(), book.getId(), quantity);
@@ -74,8 +74,8 @@ public class CartItemServiceTest {
 		// then
 		verify(userRepository, times(1)).findById(anyLong());
 		verify(bookRepository, times(1)).findById(anyLong());
-		verify(cartRepository, times(1)).findByUserIdAndBookId(anyLong(), anyLong());
-		verify(cartRepository, times(1)).save(any());
+		verify(cartItemRepository, times(1)).findByUserIdAndBookId(anyLong(), anyLong());
+		verify(cartItemRepository, times(1)).save(any());
 	}
 
 	@Test
@@ -102,7 +102,7 @@ public class CartItemServiceTest {
 
 		given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 		given(bookRepository.findById(anyLong())).willReturn(Optional.of(book));
-		given(cartRepository.findByUserIdAndBookId(anyLong(), anyLong())).willReturn(
+		given(cartItemRepository.findByUserIdAndBookId(anyLong(), anyLong())).willReturn(
 			Optional.of(cartItem));
 
 		// when
@@ -178,7 +178,7 @@ public class CartItemServiceTest {
 				.build()
 		);
 
-		given(cartRepository.findAllByUserId(anyLong())).willReturn(cartItemList);
+		given(cartItemRepository.findAllByUserId(anyLong())).willReturn(cartItemList);
 
 		// when
 		List<CartItemInfo> cart = cartService.getCart(user.getId());
@@ -223,7 +223,7 @@ public class CartItemServiceTest {
 
 		Integer quantity = 10;
 
-		given(cartRepository.findByUserIdAndBookId(anyLong(), anyLong())).willReturn(Optional.of(cartItem));
+		given(cartItemRepository.findByUserIdAndBookId(anyLong(), anyLong())).willReturn(Optional.of(cartItem));
 
 		// when
 		cartService.updateQuantityOfBookInCart(user.getId(), book.getId(), quantity);
@@ -244,7 +244,7 @@ public class CartItemServiceTest {
 		Long bookId = 10L;
 		Integer quantity = 10;
 
-		given(cartRepository.findByUserIdAndBookId(anyLong(), anyLong())).willReturn(Optional.empty());
+		given(cartItemRepository.findByUserIdAndBookId(anyLong(), anyLong())).willReturn(Optional.empty());
 
 		// when
 		CustomException exception = assertThrows(CustomException.class,
@@ -278,14 +278,14 @@ public class CartItemServiceTest {
 
 		Integer quantity = 10;
 
-		given(cartRepository.findByUserIdAndBookId(anyLong(), anyLong())).willReturn(Optional.of(cartItem));
+		given(cartItemRepository.findByUserIdAndBookId(anyLong(), anyLong())).willReturn(Optional.of(cartItem));
 
 		// when
 		cartService.deleteBookInCart(user.getId(), book.getId());
 
 		// then
-		verify(cartRepository, times(1)).findByUserIdAndBookId(anyLong(), anyLong());
-		verify(cartRepository, times(1)).delete(any());
+		verify(cartItemRepository, times(1)).findByUserIdAndBookId(anyLong(), anyLong());
+		verify(cartItemRepository, times(1)).delete(any());
 	}
 
 	@Test
@@ -331,13 +331,13 @@ public class CartItemServiceTest {
 
 		Integer quantity = 10;
 
-		given(cartRepository.findAllByUserId(anyLong())).willReturn(cartItemList);
+		given(cartItemRepository.findAllByUserId(anyLong())).willReturn(cartItemList);
 
 		// when
 		cartService.deleteCart(user.getId());
 
 		// then
-		verify(cartRepository, times(1)).findAllByUserId(anyLong());
-		verify(cartRepository, times(1)).deleteAll(anyList());
+		verify(cartItemRepository, times(1)).findAllByUserId(anyLong());
+		verify(cartItemRepository, times(1)).deleteAll(anyList());
 	}
 }

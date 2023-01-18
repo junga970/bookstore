@@ -11,7 +11,7 @@ import com.example.bookstore.entity.CartItem;
 import com.example.bookstore.entity.User;
 import com.example.bookstore.exception.CustomException;
 import com.example.bookstore.repository.BookRepository;
-import com.example.bookstore.repository.CartRepository;
+import com.example.bookstore.repository.CartItemRepository;
 import com.example.bookstore.repository.UserRepository;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +27,7 @@ public class CartService {
 
 	private final UserRepository userRepository;
 	private final BookRepository bookRepository;
-	private final CartRepository cartRepository;
+	private final CartItemRepository cartItemRepository;
 
 	public void addBookToCart(Long userId, Long bookId, Integer quantity) {
 
@@ -37,12 +37,12 @@ public class CartService {
 		Book book = bookRepository.findById(bookId)
 			.orElseThrow(() -> new CustomException(DOES_NOT_EXIST_BOOK_ID, HttpStatus.NOT_FOUND));
 
-		cartRepository.findByUserIdAndBookId(userId, bookId).ifPresentOrElse(
+		cartItemRepository.findByUserIdAndBookId(userId, bookId).ifPresentOrElse(
 			cartItem -> {
 				cartItem.setQuantity(cartItem.getQuantity() + quantity);
-				cartRepository.save(cartItem);
+				cartItemRepository.save(cartItem);
 			},
-			() -> cartRepository.save(CartItem.builder()
+			() -> cartItemRepository.save(CartItem.builder()
 				.user(user)
 				.book(book)
 				.quantity(quantity)
@@ -52,32 +52,32 @@ public class CartService {
 
 	public List<CartItemInfo> getCart(Long userId) {
 
-		List<CartItem> cartItem = cartRepository.findAllByUserId(userId);
+		List<CartItem> cartItem = cartItemRepository.findAllByUserId(userId);
 
 		return cartItem.stream().map(CartItemInfo::fromEntity).collect(Collectors.toList());
 	}
 
 	public void updateQuantityOfBookInCart(Long userId, Long bookId, Integer quantity) {
 
-		CartItem cartItem = cartRepository.findByUserIdAndBookId(userId, bookId)
+		CartItem cartItem = cartItemRepository.findByUserIdAndBookId(userId, bookId)
 			.orElseThrow(() -> new CustomException(DOES_NOT_EXIST_CART_ITEM_ID, HttpStatus.NOT_FOUND));
 
 		cartItem.setQuantity(quantity);
-		cartRepository.save(cartItem);
+		cartItemRepository.save(cartItem);
 	}
 
 	public void deleteBookInCart(Long userId, Long bookId) {
 
-		CartItem cartItem = cartRepository.findByUserIdAndBookId(userId, bookId)
+		CartItem cartItem = cartItemRepository.findByUserIdAndBookId(userId, bookId)
 			.orElseThrow(() -> new CustomException(DOES_NOT_EXIST_CART_ITEM_ID, HttpStatus.NOT_FOUND));
 
-		cartRepository.delete(cartItem);
+		cartItemRepository.delete(cartItem);
 	}
 
 	public void deleteCart(Long userId) {
 
-		List<CartItem> cartItem = cartRepository.findAllByUserId(userId);
+		List<CartItem> cartItem = cartItemRepository.findAllByUserId(userId);
 
-		cartRepository.deleteAll(cartItem);
+		cartItemRepository.deleteAll(cartItem);
 	}
 }
