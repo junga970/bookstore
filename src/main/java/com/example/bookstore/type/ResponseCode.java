@@ -17,7 +17,9 @@ public enum ResponseCode {
 	DELETE_BOOK_IN_CART("장바구니 도서 삭제 성공"),
 	UPDATE_QUANTITY_OF_BOOK_IN_CART("장바구니 도서 수량 업데이트 성공"),
 	NOW_DREAM_ORDER_SUCCESSFUL("나우드림 주문 성공"),
-	GET_STOCK_BY_STORES("매장별 재고 조회 성공");
+	GET_STOCK_BY_STORES("매장별 재고 조회 성공"),
+	GET_ORDER_INFO("주문 내역 조회 성공"),
+	GET_ORDER_DETAIL("주문 상세내역 조회 성공");
 
 	private final String message;
 }

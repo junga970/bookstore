@@ -22,7 +22,7 @@ import com.example.bookstore.entity.User;
 import com.example.bookstore.exception.CustomException;
 import com.example.bookstore.repository.BookRepository;
 import com.example.bookstore.repository.CartItemRepository;
-import com.example.bookstore.repository.OrderBookRepository;
+import com.example.bookstore.repository.OrderDetailRepository;
 import com.example.bookstore.repository.OrderInfoRepository;
 import com.example.bookstore.repository.StoreRepository;
 import com.example.bookstore.repository.UserRepository;
@@ -47,7 +47,7 @@ public class NowDreamServiceTest {
 	private BookRepository bookRepository;
 
 	@Mock
-	private OrderBookRepository orderBookRepository;
+	private OrderDetailRepository orderDetailRepository;
 
 	@Mock
 	private CartItemRepository cartItemRepository;
@@ -129,7 +129,7 @@ public class NowDreamServiceTest {
 		verify(orderInfoRepository, times(1)).save(any());
 		verify(cartItemRepository, times(1)).findById(anyLong());
 		verify(cartItemRepository, times(1)).deleteById(anyLong());
-		verify(orderBookRepository, times(1)).save(any());
+		verify(orderDetailRepository, times(1)).save(any());
 
 		verify(redissonClient, times(1)).getLock(anyString());
 		verify(redissonClient, times(2)).getBucket(anyString());

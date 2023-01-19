@@ -15,7 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 @Entity
-public class OrderBook extends BaseEntity {
+public class OrderDetail extends BaseEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "book_id")

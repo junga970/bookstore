@@ -13,14 +13,14 @@ import com.example.bookstore.dto.NowDreamCartItemIds;
 import com.example.bookstore.dto.NowDreamStock;
 import com.example.bookstore.entity.Book;
 import com.example.bookstore.entity.CartItem;
-import com.example.bookstore.entity.OrderBook;
+import com.example.bookstore.entity.OrderDetail;
 import com.example.bookstore.entity.OrderInfo;
 import com.example.bookstore.entity.Store;
 import com.example.bookstore.entity.User;
 import com.example.bookstore.exception.CustomException;
 import com.example.bookstore.repository.BookRepository;
 import com.example.bookstore.repository.CartItemRepository;
-import com.example.bookstore.repository.OrderBookRepository;
+import com.example.bookstore.repository.OrderDetailRepository;
 import com.example.bookstore.repository.OrderInfoRepository;
 import com.example.bookstore.repository.StoreRepository;
 import com.example.bookstore.repository.UserRepository;
@@ -44,7 +44,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class NowDreamService {
 
 	private final BookRepository bookRepository;
-	private final OrderBookRepository orderBookRepository;
+	private final OrderDetailRepository orderDetailRepository;
 	private final UserRepository userRepository;
 	private final StoreRepository storeRepository;
 	private final OrderInfoRepository orderInfoRepository;
@@ -103,6 +103,8 @@ public class NowDreamService {
 		// lock
 		RLock lock = redissonClient.getLock(ROCK_NAME);
 
+		Integer totalPrice = 0;
+
 		try {
 			if (!lock.tryLock(WAIT_TIME, LEASE_TIME, TimeUnit.SECONDS)) {
 				throw new CustomException(FAILED_TO_ACQUIRE_LOCK, HttpStatus.SERVICE_UNAVAILABLE);
@@ -115,22 +117,31 @@ public class NowDreamService {
 			for (CurrentOrder currentOrder : currentOrders) {
 				Book book = currentOrder.getBook();
 				Integer quantity = currentOrder.getQuantity();
+				Integer price = book.getDiscountPrice() * quantity;
+
 				String key = createKey(storeId, book.getId());
 				redissonClient.getBucket(key).set(currentOrder.getStock() - quantity);
 
 				// 주문 상세 저장
-				orderBookRepository.save(
-					OrderBook.builder()
+				orderDetailRepository.save(
+					OrderDetail.builder()
 						.book(book)
 						.orderInfo(orderInfo)
 						.quantity(quantity)
-						.price(book.getDiscountPrice() * quantity)
+						.price(price)
 						.build()
 				);
 
 				// 장바구니 삭제
 				cartItemRepository.deleteById(currentOrder.getCartItemId());
+
+				totalPrice += price;
 			}
+
+			// 총 금액 저장
+			orderInfo.setTotalPrice(totalPrice);
+			orderInfoRepository.save(orderInfo);
+
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} finally {
