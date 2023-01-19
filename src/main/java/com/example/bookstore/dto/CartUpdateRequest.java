@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CartQuantity {
+public class CartUpdateRequest {
 
 	@NotNull()
 	@Min(1)

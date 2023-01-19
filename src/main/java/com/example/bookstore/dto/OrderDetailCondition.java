@@ -15,7 +15,7 @@ import lombok.Setter;
 @Builder
 public class OrderDetailCondition {
 
-	private BookInfo bookInfo;
+	private BookCondition bookCondition;
 	private Integer quantity;
 	private Integer price;
 
@@ -24,7 +24,7 @@ public class OrderDetailCondition {
 		Book book = orderDetail.getBook();
 
 		return OrderDetailCondition.builder()
-			.bookInfo(BookInfo.fromEntity(book))
+			.bookCondition(BookCondition.fromEntity(book))
 			.quantity(orderDetail.getQuantity())
 			.price(orderDetail.getPrice())
 			.build();

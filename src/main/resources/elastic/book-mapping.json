@@ -1,20 +1,32 @@
 {
-  "properties" : {
-    "id" : {"type" : "long"},
-    "title" : {
-      "type" : "text",
-      "analyzer" : "korean"
+  "properties": {
+    "id": {
+      "type": "long"
     },
-    "imageUrl" : {"type" : "keyword"},
-    "publisher" : {"type" : "keyword"},
-    "publicationDate" : {"type" : "date"},
-    "authors" : {
-      "properties" : {
-        "type" : "text",
-        "analyzer" : "korean"
+    "title": {
+      "type": "text",
+      "analyzer": "korean"
+    },
+    "imageUrl": {
+      "type": "keyword"
+    },
+    "publisher": {
+      "type": "keyword"
+    },
+    "publicationDate": {
+      "type": "date"
+    },
+    "authors": {
+      "properties": {
+        "type": "text",
+        "analyzer": "korean"
       }
     },
-    "price" : {"type" : "integer"},
-    "discountPrice" : {"type" : "integer"}
+    "price": {
+      "type": "integer"
+    },
+    "discountPrice": {
+      "type": "integer"
+    }
   }
 }

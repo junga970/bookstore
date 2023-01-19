@@ -25,53 +25,59 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 public class JwtTokenProvider {
-    @Value("${jwt.token.secret-key}")
-    private String secretKey;
 
-    private final long tokenValidTime = 30 * 60 * 1000L;
-    private final UserDetailsService userDetailsService;
-    private final UserRepository userRepository;
+	@Value("${jwt.token.secret-key}")
+	private String secretKey;
 
-    @PostConstruct
-    protected void init() {
-        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
-    }
+	private final long tokenValidTime = 30 * 60 * 1000L;
+	private final UserDetailsService userDetailsService;
+	private final UserRepository userRepository;
 
-    public Token createToken(String email, List<String> roles) {
-        Claims claims = Jwts.claims().setSubject(email);
-        claims.put("roles", roles);
-        Date now = new Date();
-        String accessToken = Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + tokenValidTime))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .compact();
+	@PostConstruct
+	protected void init() {
+		secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+	}
 
-        return new Token(accessToken);
-    }
+	public Token createToken(String email, List<String> roles) {
 
-    public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(getUserEmail(token));
+		Claims claims = Jwts.claims().setSubject(email);
+		claims.put("roles", roles);
+		Date now = new Date();
 
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-    }
+		String accessToken = Jwts.builder()
+			.setClaims(claims)
+			.setIssuedAt(now)
+			.setExpiration(new Date(now.getTime() + tokenValidTime))
+			.signWith(SignatureAlgorithm.HS256, secretKey)
+			.compact();
 
-    public String getUserEmail(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
-    }
+		return new Token(accessToken);
+	}
 
-    public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("Authorization");
-    }
+	public Authentication getAuthentication(String token) {
 
-    public boolean validateToken(String jwtToken) {
-        Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken).getBody();
+		UserDetails userDetails = userDetailsService.loadUserByUsername(getUserEmail(token));
 
-        String email = claims.getSubject();
-        userRepository.findByEmail(email)
-            .orElseThrow(() -> new CustomException(USER_NOT_FOUND, HttpStatus.NOT_FOUND));
+		return new UsernamePasswordAuthenticationToken(
+			userDetails, "", userDetails.getAuthorities());
+	}
 
-        return claims.getExpiration().after(new Date());
-    }
+	public String getUserEmail(String token) {
+		return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+	}
+
+	public String resolveToken(HttpServletRequest request) {
+		return request.getHeader("Authorization");
+	}
+
+	public boolean validateToken(String jwtToken) {
+
+		Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken).getBody();
+		String email = claims.getSubject();
+
+		userRepository.findByEmail(email)
+			.orElseThrow(() -> new CustomException(USER_NOT_FOUND, HttpStatus.NOT_FOUND));
+
+		return claims.getExpiration().after(new Date());
+	}
 }

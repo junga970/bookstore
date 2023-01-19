@@ -3,9 +3,9 @@ package com.example.bookstore.controller;
 import static com.example.bookstore.type.ResponseCode.GET_STOCK_BY_STORES;
 import static com.example.bookstore.type.ResponseCode.NOW_DREAM_ORDER_SUCCESSFUL;
 
-import com.example.bookstore.dto.NowDreamCartItemIds;
-import com.example.bookstore.dto.NowDreamStock;
-import com.example.bookstore.dto.response.ApiResponse;
+import com.example.bookstore.dto.NowDreamOrderRequest;
+import com.example.bookstore.dto.NowDreamStockCondition;
+import com.example.bookstore.dto.common.ApiResponse;
 import com.example.bookstore.service.NowDreamService;
 import java.util.List;
 import javax.validation.Valid;
@@ -33,7 +33,7 @@ public class NowDreamController {
 	public ApiResponse orderByNowDream(
 		@AuthenticationPrincipal UserDetails user,
 		@PathVariable Long storeId,
-		@RequestBody @Valid NowDreamCartItemIds request) {
+		@RequestBody @Valid NowDreamOrderRequest request) {
 
 		Long userId = Long.parseLong(user.getUsername());
 
@@ -44,10 +44,11 @@ public class NowDreamController {
 
 	@GetMapping("/stock/{bookId}")
 	@ResponseStatus(HttpStatus.OK)
-	public ApiResponse<List<NowDreamStock>> getStockByStores(@PathVariable Long bookId) {
+	public ApiResponse<List<NowDreamStockCondition>> getStockByStores(@PathVariable Long bookId) {
 
-		List<NowDreamStock> nowDreamStockList = nowDreamService.getStockByStores(bookId);
+		List<NowDreamStockCondition> nowDreamStockConditionList =
+			nowDreamService.getStockByStores(bookId);
 
-		return new ApiResponse(nowDreamStockList, GET_STOCK_BY_STORES);
+		return new ApiResponse(nowDreamStockConditionList, GET_STOCK_BY_STORES);
 	}
 }

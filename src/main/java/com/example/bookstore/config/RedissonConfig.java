@@ -29,7 +29,6 @@ public class RedissonConfig {
 
 	@Bean
 	public RedisSerializer<Object> springSessionDefaultRedisSerializer() {
-
 		return new GenericJackson2JsonRedisSerializer();
 	}
 }

@@ -24,6 +24,7 @@ public enum Order {
 	public static Sort getSort(Order order) {
 
 		Sort sort;
+
 		if (order.getOrder().equals("desc")) {
 			sort = Sort.by(order.getProperties()).descending();
 		} else if (order.getOrder().equals("asc")) {

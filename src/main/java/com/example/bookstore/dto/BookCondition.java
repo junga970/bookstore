@@ -15,9 +15,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BookInfo {
+public class BookCondition {
 
-	private Long id;
+	private Long bookId;
 	private String title;
 	private String imageUrl;
 	private String publisher;
@@ -26,10 +26,10 @@ public class BookInfo {
 	private Integer price;
 	private Integer discountPrice;
 
-	public static BookInfo fromEntity(Book book) {
+	public static BookCondition fromEntity(Book book) {
 
-		return BookInfo.builder()
-			.id(book.getId())
+		return BookCondition.builder()
+			.bookId(book.getId())
 			.title(book.getTitle())
 			.imageUrl(book.getImageUrl())
 			.publisher(book.getPublisher())
@@ -40,10 +40,10 @@ public class BookInfo {
 			.build();
 	}
 
-	public static BookInfo fromDocument(BookDocument bookDocument) {
+	public static BookCondition fromDocument(BookDocument bookDocument) {
 
-		return BookInfo.builder()
-			.id(bookDocument.getId())
+		return BookCondition.builder()
+			.bookId(bookDocument.getId())
 			.title(bookDocument.getTitle())
 			.imageUrl(bookDocument.getImageUrl())
 			.publisher(bookDocument.getPublisher())

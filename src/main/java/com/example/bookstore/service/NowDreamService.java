@@ -9,8 +9,8 @@ import static com.example.bookstore.type.ErrorCode.FAILED_TO_ACQUIRE_LOCK;
 import static com.example.bookstore.type.ErrorCode.SOLD_OUT;
 import static com.example.bookstore.type.ErrorCode.USER_NOT_FOUND;
 
-import com.example.bookstore.dto.NowDreamCartItemIds;
-import com.example.bookstore.dto.NowDreamStock;
+import com.example.bookstore.dto.NowDreamOrderRequest;
+import com.example.bookstore.dto.NowDreamStockCondition;
 import com.example.bookstore.entity.Book;
 import com.example.bookstore.entity.CartItem;
 import com.example.bookstore.entity.OrderDetail;
@@ -56,7 +56,7 @@ public class NowDreamService {
 	private static final Long LEASE_TIME = 3L;
 	private static final int EMPTY = 0;
 
-	public List<NowDreamStock> getStockByStores(Long bookId) {
+	public List<NowDreamStockCondition> getStockByStores(Long bookId) {
 
 		if (!bookRepository.existsById(bookId)) {
 			throw new CustomException(DOES_NOT_EXIST_BOOK_ID, HttpStatus.BAD_REQUEST);
@@ -64,18 +64,18 @@ public class NowDreamService {
 
 		List<Store> stores = storeRepository.findAll();
 
-		List<NowDreamStock> nowDreamStockList = new ArrayList<>();
+		List<NowDreamStockCondition> nowDreamStockConditionList = new ArrayList<>();
 
 		for (Store store : stores) {
 			String key = createKey(store.getId(), bookId);
 			int stock = (int) redissonClient.getBucket(key).get();
-			nowDreamStockList.add(new NowDreamStock(store, stock));
+			nowDreamStockConditionList.add(new NowDreamStockCondition(store, stock));
 		}
 
-		return nowDreamStockList;
+		return nowDreamStockConditionList;
 	}
 
-	public void orderByNowDream(Long userId, Long storeId, NowDreamCartItemIds request) {
+	public void orderByNowDream(Long userId, Long storeId, NowDreamOrderRequest request) {
 
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new CustomException(USER_NOT_FOUND, HttpStatus.NOT_FOUND));
@@ -194,8 +194,9 @@ public class NowDreamService {
 		private Integer quantity;
 		private Integer stock;
 
-		public CurrentOrder(Long cartItemId, Book book, Integer price, Integer quantity,
-			Integer stock) {
+		public CurrentOrder(
+			Long cartItemId, Book book, Integer price, Integer quantity, Integer stock) {
+
 			this.cartItemId = cartItemId;
 			this.book = book;
 			this.price = price;

@@ -19,18 +19,19 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private final UserRepository userRepository;
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+	private final UserRepository userRepository;
 
-        User user = userRepository.findByEmail(email)
-            .orElseThrow(() -> new CustomException(INVALID_EMAIL, HttpStatus.UNAUTHORIZED));
+	@Override
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
+		User user = userRepository.findByEmail(email)
+			.orElseThrow(() -> new CustomException(INVALID_EMAIL, HttpStatus.UNAUTHORIZED));
 
-        return new org.springframework.security.core.userdetails
-                .User(user.getId().toString(), user.getPassword(), grantedAuthorities);
-    }
+		List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+		grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
+
+		return new org.springframework.security.core.userdetails
+			.User(user.getId().toString(), user.getPassword(), grantedAuthorities);
+	}
 }

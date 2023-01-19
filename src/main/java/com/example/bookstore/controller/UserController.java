@@ -4,9 +4,9 @@ import static com.example.bookstore.type.ResponseCode.CREATE_USER;
 import static com.example.bookstore.type.ResponseCode.LOGIN_SUCCESSFUL;
 
 import com.example.bookstore.dto.Token;
-import com.example.bookstore.dto.UserLogin;
-import com.example.bookstore.dto.UserRegister;
-import com.example.bookstore.dto.response.ApiResponse;
+import com.example.bookstore.dto.LoginRequest;
+import com.example.bookstore.dto.RegisterRequest;
+import com.example.bookstore.dto.common.ApiResponse;
 import com.example.bookstore.service.UserService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class UserController {
 
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ApiResponse register(@RequestBody @Valid UserRegister request) {
+	public ApiResponse register(@RequestBody @Valid RegisterRequest request) {
 
 		userService.register(request);
 
@@ -33,7 +33,7 @@ public class UserController {
 
 	@PostMapping("/login")
 	@ResponseStatus(HttpStatus.OK)
-	public ApiResponse<Token> login(@RequestBody @Valid UserLogin request) {
+	public ApiResponse<Token> login(@RequestBody @Valid LoginRequest request) {
 
 		Token accessToken = userService.login(request);
 

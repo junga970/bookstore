@@ -5,7 +5,7 @@ import static com.example.bookstore.type.ErrorCode.DOES_NOT_EXIST_BOOK_ID;
 import static com.example.bookstore.type.ErrorCode.DOES_NOT_EXIST_CART_ITEM_ID;
 import static com.example.bookstore.type.ErrorCode.USER_NOT_FOUND;
 
-import com.example.bookstore.dto.CartItemInfo;
+import com.example.bookstore.dto.CartItemCondition;
 import com.example.bookstore.entity.Book;
 import com.example.bookstore.entity.CartItem;
 import com.example.bookstore.entity.User;
@@ -50,17 +50,18 @@ public class CartService {
 		);
 	}
 
-	public List<CartItemInfo> getCart(Long userId) {
+	public List<CartItemCondition> getCart(Long userId) {
 
 		List<CartItem> cartItem = cartItemRepository.findAllByUserId(userId);
 
-		return cartItem.stream().map(CartItemInfo::fromEntity).collect(Collectors.toList());
+		return cartItem.stream().map(CartItemCondition::fromEntity).collect(Collectors.toList());
 	}
 
 	public void updateQuantityOfBookInCart(Long userId, Long bookId, Integer quantity) {
 
 		CartItem cartItem = cartItemRepository.findByUserIdAndBookId(userId, bookId)
-			.orElseThrow(() -> new CustomException(DOES_NOT_EXIST_CART_ITEM_ID, HttpStatus.NOT_FOUND));
+			.orElseThrow(
+				() -> new CustomException(DOES_NOT_EXIST_CART_ITEM_ID, HttpStatus.NOT_FOUND));
 
 		cartItem.setQuantity(quantity);
 		cartItemRepository.save(cartItem);
@@ -69,7 +70,8 @@ public class CartService {
 	public void deleteBookInCart(Long userId, Long bookId) {
 
 		CartItem cartItem = cartItemRepository.findByUserIdAndBookId(userId, bookId)
-			.orElseThrow(() -> new CustomException(DOES_NOT_EXIST_CART_ITEM_ID, HttpStatus.NOT_FOUND));
+			.orElseThrow(
+				() -> new CustomException(DOES_NOT_EXIST_CART_ITEM_ID, HttpStatus.NOT_FOUND));
 
 		cartItemRepository.delete(cartItem);
 	}

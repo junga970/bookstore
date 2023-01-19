@@ -31,7 +31,7 @@ public class OrderService {
 		Pageable pageable = PageRequest.of(page, SIZE);
 
 		Page<OrderInfo> orderInfo = orderInfoRepository.findAllByUserIdAndOrderDateBetween(
-				userId, startDate.atStartOfDay(), endDate.atStartOfDay(), pageable);
+			userId, startDate.atStartOfDay(), endDate.atStartOfDay(), pageable);
 
 		return orderInfo.map(OrderInfoCondition::fromEntity);
 	}

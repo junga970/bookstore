@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class NowDreamCartItemIds {
+public class NowDreamOrderRequest {
 
 	@NotEmpty
 	List<@Valid Long> cartItemIds;

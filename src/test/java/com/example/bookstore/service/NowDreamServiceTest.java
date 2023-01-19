@@ -12,8 +12,8 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.example.bookstore.dto.NowDreamCartItemIds;
-import com.example.bookstore.dto.NowDreamStock;
+import com.example.bookstore.dto.NowDreamOrderRequest;
+import com.example.bookstore.dto.NowDreamStockCondition;
 import com.example.bookstore.entity.Book;
 import com.example.bookstore.entity.CartItem;
 import com.example.bookstore.entity.OrderInfo;
@@ -116,17 +116,17 @@ public class NowDreamServiceTest {
 		// 재고 100개 설정
 		given(rBucket.get()).willReturn(100);
 
-		NowDreamCartItemIds nowDreamCartItemIds = new NowDreamCartItemIds(Arrays.asList(1L));
+		NowDreamOrderRequest nowDreamOrderRequest = new NowDreamOrderRequest(Arrays.asList(1L));
 
 		// when
-		nowDreamService.orderByNowDream(1L, 1L, nowDreamCartItemIds);
+		nowDreamService.orderByNowDream(1L, 1L, nowDreamOrderRequest);
 
 		// then
 		verify(userRepository, times(1)).findById(anyLong());
 		verify(storeRepository, times(1)).findById(anyLong());
 		verify(orderInfoRepository, times(1)).existsById(anyString());
 		verify(orderInfoRepository, times(1)).findById(anyString());
-		verify(orderInfoRepository, times(1)).save(any());
+		verify(orderInfoRepository, times(2)).save(any());
 		verify(cartItemRepository, times(1)).findById(anyLong());
 		verify(cartItemRepository, times(1)).deleteById(anyLong());
 		verify(orderDetailRepository, times(1)).save(any());
@@ -179,11 +179,11 @@ public class NowDreamServiceTest {
 		// 재고 0개 설정
 		given(rBucket.get()).willReturn(0);
 
-		NowDreamCartItemIds nowDreamCartItemIds = new NowDreamCartItemIds(Arrays.asList(1L));
+		NowDreamOrderRequest nowDreamOrderRequest = new NowDreamOrderRequest(Arrays.asList(1L));
 
 		// when
 		CustomException exception = assertThrows(CustomException.class,
-			() -> nowDreamService.orderByNowDream(1L, 1L, nowDreamCartItemIds));
+			() -> nowDreamService.orderByNowDream(1L, 1L, nowDreamOrderRequest));
 
 		// then
 		assertEquals(SOLD_OUT, exception.getErrorCode());
@@ -222,17 +222,18 @@ public class NowDreamServiceTest {
 		given(rBucket.get()).willReturn(50);
 
 		// when
-		List<NowDreamStock> nowDreamStockList = nowDreamService.getStockByStores(bookId);
+		List<NowDreamStockCondition> nowDreamStockConditionList = nowDreamService.getStockByStores(
+			bookId);
 
 		// then
-		assertEquals(nowDreamStockList.get(0).getStore().getName(), "사당점");
-		assertEquals(nowDreamStockList.get(0).getStock(), 50);
+		assertEquals(nowDreamStockConditionList.get(0).getStore().getName(), "사당점");
+		assertEquals(nowDreamStockConditionList.get(0).getStock(), 50);
 
-		assertEquals(nowDreamStockList.get(1).getStore().getName(), "강남점");
-		assertEquals(nowDreamStockList.get(1).getStock(), 50);
+		assertEquals(nowDreamStockConditionList.get(1).getStore().getName(), "강남점");
+		assertEquals(nowDreamStockConditionList.get(1).getStock(), 50);
 
-		assertEquals(nowDreamStockList.get(2).getStore().getName(), "서을대입구점");
-		assertEquals(nowDreamStockList.get(2).getStock(), 50);
+		assertEquals(nowDreamStockConditionList.get(2).getStore().getName(), "서을대입구점");
+		assertEquals(nowDreamStockConditionList.get(2).getStock(), 50);
 	}
 
 	@Test

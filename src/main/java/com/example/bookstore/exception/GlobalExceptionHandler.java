@@ -4,7 +4,7 @@ import static com.example.bookstore.type.ErrorCode.HTTP_MASSAGE_NOT_READABLE_EXC
 import static com.example.bookstore.type.ErrorCode.METHOD_ARGUMENT_NOT_VALID;
 import static com.example.bookstore.type.ErrorCode.METHOD_ARGUMENT_TYPE_MISMATCH;
 
-import com.example.bookstore.dto.response.ErrorResponse;
+import com.example.bookstore.dto.common.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -18,7 +18,6 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(CustomException.class)
 	public ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
-
 		return ErrorResponse.response(e.getErrorCode(), e.getHttpStatus());
 	}
 

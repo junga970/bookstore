@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class NowDreamStock {
+public class NowDreamStockCondition {
 
 	private Store store;
 	private int stock;
