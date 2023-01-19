@@ -20,43 +20,43 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
-    private final JwtTokenProvider jwtTokenProvider;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	private final JwtTokenProvider jwtTokenProvider;
 
-    @Bean
-    public AuthenticationManager authenticationManager(
-        AuthenticationConfiguration authenticationConfiguration)
-            throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.httpBasic().disable()
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers(
-                    "/register",
-                    "/login",
-                    "/books",
-                    "/search",
-                    "/now-dream/stock/**"
-                ).permitAll()
-                .anyRequest().authenticated();
+	@Bean
+	public AuthenticationManager authenticationManager(
+		AuthenticationConfiguration authenticationConfiguration) throws Exception {
 
-        http.addFilterBefore(
-            new JwtAuthenticationFilter(jwtTokenProvider),
-            UsernamePasswordAuthenticationFilter.class
-        );
+		return authenticationConfiguration.getAuthenticationManager();
+	}
 
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint());
+		http.httpBasic().disable()
+			.csrf().disable()
+			.authorizeRequests()
+			.antMatchers(
+				"/register",
+				"/login",
+				"/books",
+				"/search",
+				"/now-dream/stock/**"
+			).permitAll()
+			.anyRequest().authenticated();
 
-        return http.build();
-    }
+		http.addFilterBefore(
+			new JwtAuthenticationFilter(jwtTokenProvider),
+			UsernamePasswordAuthenticationFilter.class);
+
+		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		http.exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint());
+
+		return http.build();
+	}
 }

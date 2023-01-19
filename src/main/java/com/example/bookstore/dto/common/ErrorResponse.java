@@ -1,4 +1,4 @@
-package com.example.bookstore.dto.response;
+package com.example.bookstore.dto.common;
 
 import com.example.bookstore.type.ErrorCode;
 import lombok.Builder;

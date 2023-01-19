@@ -1,4 +1,4 @@
-package com.example.bookstore.config;
+package com.example.bookstore.config.elasticsearch;
 
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +12,7 @@ public class ElasticSearchConfig extends AbstractElasticsearchConfiguration {
 
 	@Override
 	public RestHighLevelClient elasticsearchClient() {
+
 		ClientConfiguration clientConfiguration = ClientConfiguration.builder()
 			.connectedTo("localhost:9200")
 			.build();

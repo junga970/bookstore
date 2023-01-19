@@ -9,7 +9,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
-import com.example.bookstore.dto.BookInfo;
+import com.example.bookstore.dto.BookCondition;
 import com.example.bookstore.entity.Book;
 import com.example.bookstore.entity.BookDocument;
 import com.example.bookstore.exception.CustomException;
@@ -55,7 +55,6 @@ public class BookServiceTest {
 	@Test
 	@DisplayName("도서 조회 성공")
 	void getBooksByCategorySuccess() {
-
 		// given
 		Long subCategoryId = 1L;
 		String orderValue = "bestseller";
@@ -79,7 +78,8 @@ public class BookServiceTest {
 		given(bookRepository.findBySubCategoryId(anyLong(), any())).willReturn(books);
 
 		// when
-		Page<BookInfo> pageInfo = bookService.getBooksByCategory(subCategoryId, orderValue, page);
+		Page<BookCondition> pageInfo = bookService.getBooksByCategory(subCategoryId, orderValue,
+			page);
 
 		// then
 		assertEquals("테스트제목1", pageInfo.getContent().get(0).getTitle());
@@ -92,7 +92,6 @@ public class BookServiceTest {
 	@Test
 	@DisplayName("도서 조회 실패 - 존재하지 않는 서브카테고리")
 	void getBooksByCategoryFailure_DoesNotExistSubCategoryId() {
-
 		// given
 		Long subCategoryId = 100L;
 		String orderValue = "bestseller";
@@ -112,7 +111,6 @@ public class BookServiceTest {
 	@Test
 	@DisplayName("도서 조회 실패 - 잘못된 정렬 값")
 	void getBooksByCategoryFailure_InvalidOrderValue() {
-
 		// given
 		Long subCategoryId = 1L;
 		String orderValue = "TEST";
@@ -135,7 +133,6 @@ public class BookServiceTest {
 	@Test
 	@DisplayName("도서 or 작가 검색 - 성공")
 	void searchBooksSuccess() {
-
 		// given
 		List<BookDocument> bookDocumentList = Arrays.asList(
 			BookDocument.builder()
@@ -154,7 +151,7 @@ public class BookServiceTest {
 			.willReturn(bookDocuments);
 
 		// when
-		Page<BookInfo> pageInfo = bookService.searchBooks("테스트", 0);
+		Page<BookCondition> pageInfo = bookService.searchBooks("테스트", 0);
 
 		// then
 		assertEquals("자바스프링", pageInfo.getContent().get(0).getTitle());

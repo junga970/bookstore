@@ -12,21 +12,23 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CartItemInfo {
+public class CartItemCondition {
 
-	private BookInfo bookInfo;
+	private Long cartItemId;
+	private BookCondition bookCondition;
 	private Integer quantity;
 	private Integer totalPrice;
 
-	public static CartItemInfo fromEntity(CartItem cartItem) {
+	public static CartItemCondition fromEntity(CartItem cartItem) {
 
-		BookInfo bookInfo = BookInfo.fromEntity(cartItem.getBook());
+		BookCondition bookCondition = BookCondition.fromEntity(cartItem.getBook());
 		Integer quantity = cartItem.getQuantity();
 
-		return CartItemInfo.builder()
-			.bookInfo(bookInfo)
+		return CartItemCondition.builder()
+			.cartItemId(cartItem.getId())
+			.bookCondition(bookCondition)
 			.quantity(quantity)
-			.totalPrice(bookInfo.getDiscountPrice() * quantity)
+			.totalPrice(bookCondition.getDiscountPrice() * quantity)
 			.build();
 	}
 }

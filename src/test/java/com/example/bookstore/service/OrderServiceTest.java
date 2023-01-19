@@ -112,11 +112,11 @@ public class OrderServiceTest {
 		List<OrderDetailCondition> orderDetailConditions = orderService.getOrderDetail(orderInfoId);
 
 		// then
-		assertEquals("타이틀1", orderDetailConditions.get(0).getBookInfo().getTitle());
+		assertEquals("타이틀1", orderDetailConditions.get(0).getBookCondition().getTitle());
 		assertEquals((Integer) 10, orderDetailConditions.get(0).getQuantity());
 		assertEquals((Integer) 10000, orderDetailConditions.get(0).getPrice());
 
-		assertEquals("타이틀2", orderDetailConditions.get(1).getBookInfo().getTitle());
+		assertEquals("타이틀2", orderDetailConditions.get(1).getBookCondition().getTitle());
 		assertEquals((Integer) 1, orderDetailConditions.get(1).getQuantity());
 		assertEquals((Integer) 20000, orderDetailConditions.get(1).getPrice());
 	}

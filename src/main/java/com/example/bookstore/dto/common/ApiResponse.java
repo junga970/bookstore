@@ -1,4 +1,4 @@
-package com.example.bookstore.dto.response;
+package com.example.bookstore.dto.common;
 
 import com.example.bookstore.type.ResponseCode;
 import lombok.Getter;
@@ -20,6 +20,7 @@ public class ApiResponse<T> {
 	}
 
 	public ApiResponse(@Nullable T data, ResponseCode responseCode) {
+
 		this.data = data;
 		this.responseCode = responseCode;
 		this.message = responseCode.getMessage();

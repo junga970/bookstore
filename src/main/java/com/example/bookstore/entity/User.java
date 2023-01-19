@@ -11,16 +11,15 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @Entity
-@AttributeOverrides(
-        @AttributeOverride(name = "createdAt", column = @Column(name = "registered_at"))
-)
+@AttributeOverrides(@AttributeOverride(name = "createdAt", column = @Column(name = "registered_at")))
 public class User extends BaseEntity {
-    private String name;
-    private String email;
-    private String password;
-    private String phone;
-    private String address;
 
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
+	private String name;
+	private String email;
+	private String password;
+	private String phone;
+	private String address;
+
+	@Enumerated(EnumType.STRING)
+	private UserRole role;
 }

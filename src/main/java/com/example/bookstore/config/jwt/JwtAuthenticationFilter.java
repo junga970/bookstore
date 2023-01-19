@@ -22,27 +22,31 @@ import org.springframework.web.filter.GenericFilterBean;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends GenericFilterBean {
-    private final JwtTokenProvider jwtTokenProvider;
 
-    @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        try {
-            String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
-            if (token != null && jwtTokenProvider.validateToken(token)) {
-                Authentication authentication = jwtTokenProvider.getAuthentication(token);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-        } catch (SignatureException | MalformedJwtException e) {
-            request.setAttribute("errorCode", INVALID_TOKEN);
-            request.setAttribute("httpStatus", HttpStatus.UNAUTHORIZED);
-        } catch (ExpiredJwtException e) {
-            request.setAttribute("errorCode", EXPIRED_TOKEN);
-            request.setAttribute("httpStatus", HttpStatus.UNAUTHORIZED);
-        } catch (CustomException e) {
-            request.setAttribute("errorCode", USER_NOT_FOUND);
-            request.setAttribute("httpStatus", e.getHttpStatus());
-        }
+	private final JwtTokenProvider jwtTokenProvider;
 
-        chain.doFilter(request, response);
-    }
+	@Override
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+		throws IOException, ServletException {
+
+		try {
+			String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
+
+			if (token != null && jwtTokenProvider.validateToken(token)) {
+				Authentication authentication = jwtTokenProvider.getAuthentication(token);
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+			}
+		} catch (SignatureException | MalformedJwtException e) {
+			request.setAttribute("errorCode", INVALID_TOKEN);
+			request.setAttribute("httpStatus", HttpStatus.UNAUTHORIZED);
+		} catch (ExpiredJwtException e) {
+			request.setAttribute("errorCode", EXPIRED_TOKEN);
+			request.setAttribute("httpStatus", HttpStatus.UNAUTHORIZED);
+		} catch (CustomException e) {
+			request.setAttribute("errorCode", USER_NOT_FOUND);
+			request.setAttribute("httpStatus", e.getHttpStatus());
+		}
+
+		chain.doFilter(request, response);
+	}
 }

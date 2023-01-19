@@ -5,7 +5,7 @@ import static com.example.bookstore.type.ResponseCode.GET_ORDER_INFO;
 
 import com.example.bookstore.dto.OrderDetailCondition;
 import com.example.bookstore.dto.OrderInfoCondition;
-import com.example.bookstore.dto.response.ApiResponse;
+import com.example.bookstore.dto.common.ApiResponse;
 import com.example.bookstore.service.OrderService;
 import java.time.LocalDate;
 import java.util.List;
@@ -46,8 +46,6 @@ public class OrderController {
 		return new ApiResponse(orderInfoConditionPage, GET_ORDER_INFO);
 	}
 
-
-	// 주문 상세 내역 조회, 오더 Id 요청 받기
 	@GetMapping("/{orderInfoId}")
 	@ResponseStatus(HttpStatus.OK)
 	public ApiResponse<List<OrderDetailCondition>> getOrderDetail(

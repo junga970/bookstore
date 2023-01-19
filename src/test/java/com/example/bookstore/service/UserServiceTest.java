@@ -16,8 +16,8 @@ import static org.mockito.Mockito.verify;
 
 import com.example.bookstore.config.jwt.JwtTokenProvider;
 import com.example.bookstore.dto.Token;
-import com.example.bookstore.dto.UserLogin;
-import com.example.bookstore.dto.UserRegister;
+import com.example.bookstore.dto.LoginRequest;
+import com.example.bookstore.dto.RegisterRequest;
 import com.example.bookstore.entity.User;
 import com.example.bookstore.exception.CustomException;
 import com.example.bookstore.repository.UserRepository;
@@ -54,7 +54,7 @@ class UserServiceTest {
 	@DisplayName("회원가입 성공")
 	void registerSuccess() {
 		// given
-		UserRegister request = UserRegister.builder()
+		RegisterRequest request = RegisterRequest.builder()
 			.name("이름원")
 			.email("test1@gmail.com")
 			.password("test123!")
@@ -74,7 +74,7 @@ class UserServiceTest {
 	@DisplayName("회원가입 실패 - 이메일 중복")
 	void registerFailure_EmailAlreadyExists() {
 		// given
-		UserRegister request = UserRegister.builder()
+		RegisterRequest request = RegisterRequest.builder()
 			.name("이름원")
 			.email("test1@gmail.com")
 			.password("test123!")
@@ -109,7 +109,7 @@ class UserServiceTest {
 			.role(ROLE_USER)
 			.build();
 
-		UserLogin request = UserLogin.builder()
+		LoginRequest request = LoginRequest.builder()
 			.email("test1@gmail.com")
 			.password("test123!")
 			.build();
@@ -130,7 +130,7 @@ class UserServiceTest {
 	@DisplayName("로그인 실패 - 이메일에 해당하는 사용자 없음")
 	void loginFailure_UserNotFound() {
 		// given
-		UserLogin request = UserLogin.builder()
+		LoginRequest request = LoginRequest.builder()
 			.email("test1@gmail.com")
 			.password("test123!")
 			.build();
@@ -159,7 +159,7 @@ class UserServiceTest {
 			.role(ROLE_USER)
 			.build();
 
-		UserLogin request = UserLogin.builder()
+		LoginRequest request = LoginRequest.builder()
 			.email("test1@gmail.com")
 			.password("test567!")
 			.build();

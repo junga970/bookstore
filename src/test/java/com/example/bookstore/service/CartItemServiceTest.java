@@ -11,7 +11,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.example.bookstore.dto.CartItemInfo;
+import com.example.bookstore.dto.CartItemCondition;
 import com.example.bookstore.entity.Book;
 import com.example.bookstore.entity.CartItem;
 import com.example.bookstore.entity.User;
@@ -66,7 +66,8 @@ public class CartItemServiceTest {
 
 		given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 		given(bookRepository.findById(anyLong())).willReturn(Optional.of(book));
-		given(cartItemRepository.findByUserIdAndBookId(any(), anyLong())).willReturn(Optional.empty());
+		given(cartItemRepository.findByUserIdAndBookId(any(), anyLong())).willReturn(
+			Optional.empty());
 
 		// when
 		cartService.addBookToCart(user.getId(), book.getId(), quantity);
@@ -181,21 +182,21 @@ public class CartItemServiceTest {
 		given(cartItemRepository.findAllByUserId(anyLong())).willReturn(cartItemList);
 
 		// when
-		List<CartItemInfo> cart = cartService.getCart(user.getId());
+		List<CartItemCondition> cart = cartService.getCart(user.getId());
 
 		// then
-		assertEquals("자바 스프링1", cart.get(0).getBookInfo().getTitle());
-		assertEquals((Integer) 1000, cart.get(0).getBookInfo().getDiscountPrice());
+		assertEquals("자바 스프링1", cart.get(0).getBookCondition().getTitle());
+		assertEquals((Integer) 1000, cart.get(0).getBookCondition().getDiscountPrice());
 		assertEquals((Integer) 5, cart.get(0).getQuantity());
 		assertEquals((Integer) 5000, cart.get(0).getTotalPrice());
 
-		assertEquals("자바 스프링2", cart.get(1).getBookInfo().getTitle());
-		assertEquals((Integer) 2000, cart.get(1).getBookInfo().getDiscountPrice());
+		assertEquals("자바 스프링2", cart.get(1).getBookCondition().getTitle());
+		assertEquals((Integer) 2000, cart.get(1).getBookCondition().getDiscountPrice());
 		assertEquals((Integer) 5, cart.get(1).getQuantity());
 		assertEquals((Integer) 10000, cart.get(1).getTotalPrice());
 
-		assertEquals("자바 스프링3", cart.get(2).getBookInfo().getTitle());
-		assertEquals((Integer) 3000, cart.get(2).getBookInfo().getDiscountPrice());
+		assertEquals("자바 스프링3", cart.get(2).getBookCondition().getTitle());
+		assertEquals((Integer) 3000, cart.get(2).getBookCondition().getDiscountPrice());
 		assertEquals((Integer) 5, cart.get(2).getQuantity());
 		assertEquals((Integer) 15000, cart.get(2).getTotalPrice());
 	}
@@ -223,7 +224,8 @@ public class CartItemServiceTest {
 
 		Integer quantity = 10;
 
-		given(cartItemRepository.findByUserIdAndBookId(anyLong(), anyLong())).willReturn(Optional.of(cartItem));
+		given(cartItemRepository.findByUserIdAndBookId(anyLong(), anyLong())).willReturn(
+			Optional.of(cartItem));
 
 		// when
 		cartService.updateQuantityOfBookInCart(user.getId(), book.getId(), quantity);
@@ -244,7 +246,8 @@ public class CartItemServiceTest {
 		Long bookId = 10L;
 		Integer quantity = 10;
 
-		given(cartItemRepository.findByUserIdAndBookId(anyLong(), anyLong())).willReturn(Optional.empty());
+		given(cartItemRepository.findByUserIdAndBookId(anyLong(), anyLong())).willReturn(
+			Optional.empty());
 
 		// when
 		CustomException exception = assertThrows(CustomException.class,
@@ -278,7 +281,8 @@ public class CartItemServiceTest {
 
 		Integer quantity = 10;
 
-		given(cartItemRepository.findByUserIdAndBookId(anyLong(), anyLong())).willReturn(Optional.of(cartItem));
+		given(cartItemRepository.findByUserIdAndBookId(anyLong(), anyLong())).willReturn(
+			Optional.of(cartItem));
 
 		// when
 		cartService.deleteBookInCart(user.getId(), book.getId());

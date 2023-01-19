@@ -6,9 +6,9 @@ import static com.example.bookstore.type.ResponseCode.DELETE_CART;
 import static com.example.bookstore.type.ResponseCode.GET_CART;
 import static com.example.bookstore.type.ResponseCode.UPDATE_QUANTITY_OF_BOOK_IN_CART;
 
-import com.example.bookstore.dto.CartItemInfo;
-import com.example.bookstore.dto.CartQuantity;
-import com.example.bookstore.dto.response.ApiResponse;
+import com.example.bookstore.dto.CartItemCondition;
+import com.example.bookstore.dto.CartUpdateRequest;
+import com.example.bookstore.dto.common.ApiResponse;
 import com.example.bookstore.service.CartService;
 import java.util.List;
 import javax.validation.Valid;
@@ -38,7 +38,7 @@ public class CartController {
 	public ApiResponse addBookToCart(
 		@AuthenticationPrincipal UserDetails user,
 		@PathVariable Long bookId,
-		@RequestBody @Valid CartQuantity request) {
+		@RequestBody @Valid CartUpdateRequest request) {
 
 		Long userId = Long.parseLong(user.getUsername());
 		Integer quantity = request.getQuantity();
@@ -53,7 +53,7 @@ public class CartController {
 	public ApiResponse updateQuantityOfBookInCart(
 		@AuthenticationPrincipal UserDetails user,
 		@PathVariable Long bookId,
-		@RequestBody @Valid CartQuantity request) {
+		@RequestBody @Valid CartUpdateRequest request) {
 
 		Long userId = Long.parseLong(user.getUsername());
 		Integer quantity = request.getQuantity();
@@ -77,11 +77,11 @@ public class CartController {
 
 	@GetMapping()
 	@ResponseStatus(HttpStatus.OK)
-	public ApiResponse<List<CartItemInfo>> getCart(@AuthenticationPrincipal UserDetails user) {
+	public ApiResponse<List<CartItemCondition>> getCart(@AuthenticationPrincipal UserDetails user) {
 
 		Long userId = Long.parseLong(user.getUsername());
 
-		List<CartItemInfo> cart = cartService.getCart(userId);
+		List<CartItemCondition> cart = cartService.getCart(userId);
 
 		return new ApiResponse(cart, GET_CART);
 	}

@@ -26,7 +26,7 @@ public class UserDetailsServiceImplTest {
 	private UserRepository userRepository;
 
 	@InjectMocks
-	private  UserDetailsServiceImpl userDetailsServiceImpl;
+	private UserDetailsServiceImpl userDetailsServiceImpl;
 
 	@Test
 	void loadUserByUsernameSuccess() {

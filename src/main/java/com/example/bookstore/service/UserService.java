@@ -7,8 +7,8 @@ import static com.example.bookstore.type.ErrorCode.INVALID_PASSWORD;
 
 import com.example.bookstore.config.jwt.JwtTokenProvider;
 import com.example.bookstore.dto.Token;
-import com.example.bookstore.dto.UserLogin;
-import com.example.bookstore.dto.UserRegister;
+import com.example.bookstore.dto.LoginRequest;
+import com.example.bookstore.dto.RegisterRequest;
 import com.example.bookstore.entity.User;
 import com.example.bookstore.exception.CustomException;
 import com.example.bookstore.repository.UserRepository;
@@ -28,7 +28,7 @@ public class UserService {
 	private final JwtTokenProvider jwtTokenProvider;
 	private final PasswordEncoder passwordEncoder;
 
-	public void register(UserRegister request) {
+	public void register(RegisterRequest request) {
 
 		if (userRepository.existsByEmail(request.getEmail())) {
 			throw new CustomException(EMAIL_ALREADY_EXISTS, HttpStatus.CONFLICT);
@@ -47,7 +47,7 @@ public class UserService {
 		);
 	}
 
-	public Token login(UserLogin request) {
+	public Token login(LoginRequest request) {
 
 		User user = userRepository.findByEmail(request.getEmail())
 			.orElseThrow(() -> new CustomException(INVALID_EMAIL, HttpStatus.UNAUTHORIZED));

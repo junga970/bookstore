@@ -1,7 +1,7 @@
 package com.example.bookstore.controller;
 
-import com.example.bookstore.dto.BookInfo;
-import com.example.bookstore.dto.response.ApiResponse;
+import com.example.bookstore.dto.BookCondition;
+import com.example.bookstore.dto.common.ApiResponse;
 import com.example.bookstore.service.BookService;
 import com.example.bookstore.type.ResponseCode;
 import lombok.RequiredArgsConstructor;
@@ -20,23 +20,24 @@ public class BookController {
 
 	@GetMapping("/books")
 	@ResponseStatus(HttpStatus.OK)
-	public ApiResponse<Page<BookInfo>> getBooksByCategory(
+	public ApiResponse<Page<BookCondition>> getBooksByCategory(
 		@RequestParam(value = "sub-category", defaultValue = "1") Long subCategoryId,
 		@RequestParam(value = "order", defaultValue = "bestseller") String orderValue,
 		@RequestParam(defaultValue = "0") Integer page) {
 
-		Page<BookInfo> pageInfo = bookService.getBooksByCategory(subCategoryId, orderValue, page);
+		Page<BookCondition> pageInfo =
+			bookService.getBooksByCategory(subCategoryId, orderValue, page);
 
 		return new ApiResponse(pageInfo, ResponseCode.GET_BOOKS);
 	}
 
 	@GetMapping("/search")
 	@ResponseStatus(HttpStatus.OK)
-	public ApiResponse<Page<BookInfo>> searchBooks(
+	public ApiResponse<Page<BookCondition>> searchBooks(
 		@RequestParam(defaultValue = "") String keyword,
 		@RequestParam(defaultValue = "0") Integer page) {
 
-		Page<BookInfo> pageInfo = bookService.searchBooks(keyword, page);
+		Page<BookCondition> pageInfo = bookService.searchBooks(keyword, page);
 
 		return new ApiResponse(pageInfo, ResponseCode.SEARCH_BOOKS);
 	}
