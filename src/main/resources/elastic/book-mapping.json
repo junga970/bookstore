@@ -17,9 +17,12 @@
       "type": "date"
     },
     "authors": {
-      "properties": {
-        "type": "text",
-        "analyzer": "korean"
+      "type": "text",
+      "fields": {
+        "text": {
+          "type": "text",
+          "analyzer": "korean"
+        }
       }
     },
     "price": {
