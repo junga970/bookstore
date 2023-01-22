@@ -1,6 +1,6 @@
 Spring:
   datasource:
-    url: jdbc:mariadb://127.0.0.1:3306/bookstore
+    url: jdbc:mariadb://52.79.253.87:3306/bookstore
     driver-class-name: org.mariadb.jdbc.Driver
     username: ENC(kZulKeTBTgwhJQAnuZ3plG4LXV6ciAfE)
     password: ENC(t7APcxR4FMdHo/DbY+BEPdAPiIKnyUGz)
@@ -12,12 +12,17 @@ Spring:
     show-sql: true
 
   redis:
-    host: localhost
+    host: redis
     port: 6379
+
+elasticsearch:
+  host: es
+  port: 9200
 
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
+    password: ${JASYPT_PASSWORD}
 
 jwt:
   token:
