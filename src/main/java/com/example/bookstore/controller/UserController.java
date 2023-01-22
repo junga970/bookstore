@@ -4,8 +4,8 @@ import static com.example.bookstore.type.ResponseCode.CREATE_USER;
 import static com.example.bookstore.type.ResponseCode.LOGIN_SUCCESSFUL;
 
 import com.example.bookstore.dto.Token;
-import com.example.bookstore.dto.LoginRequest;
-import com.example.bookstore.dto.RegisterRequest;
+import com.example.bookstore.dto.request.LoginRequest;
+import com.example.bookstore.dto.request.RegisterRequest;
 import com.example.bookstore.dto.common.ApiResponse;
 import com.example.bookstore.service.UserService;
 import javax.validation.Valid;

@@ -1,6 +1,5 @@
 package com.example.bookstore.entity;
 
-import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.Id;
 import lombok.AllArgsConstructor;
@@ -28,7 +27,7 @@ public class BookDocument {
 	private String title;
 	private String imageUrl;
 	private String publisher;
-	private LocalDate publicationDate;
+	private String publicationDate;
 	private List<String> authors;
 	private Integer price;
 	private Integer discountPrice;

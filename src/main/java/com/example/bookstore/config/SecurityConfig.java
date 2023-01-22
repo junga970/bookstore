@@ -48,6 +48,7 @@ public class SecurityConfig {
 				"/search",
 				"/now-dream/stock/**"
 			).permitAll()
+			.antMatchers("/admin/**").hasRole("ADMIN")
 			.anyRequest().authenticated();
 
 		http.addFilterBefore(

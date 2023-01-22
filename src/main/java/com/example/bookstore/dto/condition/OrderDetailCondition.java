@@ -1,4 +1,4 @@
-package com.example.bookstore.dto;
+package com.example.bookstore.dto.condition;
 
 import com.example.bookstore.entity.Book;
 import com.example.bookstore.entity.OrderDetail;

@@ -12,8 +12,8 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.example.bookstore.dto.NowDreamOrderRequest;
-import com.example.bookstore.dto.NowDreamStockCondition;
+import com.example.bookstore.dto.request.NowDreamOrderRequest;
+import com.example.bookstore.dto.condition.NowDreamStockCondition;
 import com.example.bookstore.entity.Book;
 import com.example.bookstore.entity.CartItem;
 import com.example.bookstore.entity.OrderInfo;

@@ -3,8 +3,8 @@ package com.example.bookstore.controller;
 import static com.example.bookstore.type.ResponseCode.GET_ORDER_DETAIL;
 import static com.example.bookstore.type.ResponseCode.GET_ORDER_INFO;
 
-import com.example.bookstore.dto.OrderDetailCondition;
-import com.example.bookstore.dto.OrderInfoCondition;
+import com.example.bookstore.dto.condition.OrderDetailCondition;
+import com.example.bookstore.dto.condition.OrderInfoCondition;
 import com.example.bookstore.dto.common.ApiResponse;
 import com.example.bookstore.service.OrderService;
 import java.time.LocalDate;

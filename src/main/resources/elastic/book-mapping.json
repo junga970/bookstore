@@ -14,7 +14,8 @@
       "type": "keyword"
     },
     "publicationDate": {
-      "type": "date"
+      "type": "date",
+      "format" : "yyyy-MM-dd"
     },
     "authors": {
       "type": "text",
