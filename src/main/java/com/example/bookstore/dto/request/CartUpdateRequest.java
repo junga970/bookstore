@@ -1,4 +1,4 @@
-package com.example.bookstore.dto;
+package com.example.bookstore.dto.request;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;

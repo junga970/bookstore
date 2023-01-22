@@ -1,4 +1,4 @@
-package com.example.bookstore.dto;
+package com.example.bookstore.dto.condition;
 
 import com.example.bookstore.entity.Book;
 import com.example.bookstore.entity.BookDocument;
@@ -47,7 +47,7 @@ public class BookCondition {
 			.title(bookDocument.getTitle())
 			.imageUrl(bookDocument.getImageUrl())
 			.publisher(bookDocument.getPublisher())
-			.publicationDate(bookDocument.getPublicationDate())
+			.publicationDate(LocalDate.parse(bookDocument.getPublicationDate()))
 			.authors(bookDocument.getAuthors())
 			.price(bookDocument.getPrice())
 			.discountPrice(bookDocument.getDiscountPrice())

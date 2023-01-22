@@ -4,9 +4,11 @@ package com.example.bookstore.service;
 import static com.example.bookstore.type.ErrorCode.DOES_NOT_EXIST_SUB_CATEGORY_ID;
 import static com.example.bookstore.type.ErrorCode.INVALID_ORDER_VALUE;
 
-import com.example.bookstore.dto.BookCondition;
+import com.example.bookstore.dto.condition.BookCondition;
+import com.example.bookstore.dto.request.BookRequest;
 import com.example.bookstore.entity.Book;
 import com.example.bookstore.entity.BookDocument;
+import com.example.bookstore.entity.SubCategory;
 import com.example.bookstore.exception.CustomException;
 import com.example.bookstore.repository.BookRepository;
 import com.example.bookstore.repository.BookSearchRepository;
@@ -68,5 +70,33 @@ public class BookService {
 			bookSearchRepository.findByTitleOrAuthors(keyword, keyword, pageable);
 
 		return books.map(BookCondition::fromDocument);
+	}
+
+	public void addBooks(BookRequest request) {
+
+		SubCategory subCategory = subCategoryRepository.findById(request.getSubCategoryId())
+			.orElseThrow(() -> new CustomException(DOES_NOT_EXIST_SUB_CATEGORY_ID, HttpStatus.NOT_FOUND));
+
+		Book book = bookRepository.save(Book.builder()
+			.subCategory(subCategory)
+			.title(request.getTitle())
+			.imageUrl(request.getImageUrl())
+			.publisher(request.getPublisher())
+			.publicationDate(request.getPublicationDate())
+			.authors(request.getAuthors())
+			.price(request.getPrice())
+			.discountPrice(request.getDiscountPrice())
+			.build());
+
+		bookSearchRepository.save(BookDocument.builder()
+			.id(book.getId())
+			.title(book.getTitle())
+			.imageUrl(book.getImageUrl())
+			.publisher(book.getPublisher())
+			.publicationDate(book.getPublicationDate().toString())
+			.authors(book.getAuthors())
+			.price(book.getPrice())
+			.discountPrice(book.getDiscountPrice())
+			.build());
 	}
 }

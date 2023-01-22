@@ -3,8 +3,8 @@ package com.example.bookstore.controller;
 import static com.example.bookstore.type.ResponseCode.GET_STOCK_BY_STORES;
 import static com.example.bookstore.type.ResponseCode.NOW_DREAM_ORDER_SUCCESSFUL;
 
-import com.example.bookstore.dto.NowDreamOrderRequest;
-import com.example.bookstore.dto.NowDreamStockCondition;
+import com.example.bookstore.dto.request.NowDreamOrderRequest;
+import com.example.bookstore.dto.condition.NowDreamStockCondition;
 import com.example.bookstore.dto.common.ApiResponse;
 import com.example.bookstore.service.NowDreamService;
 import java.util.List;

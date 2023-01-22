@@ -1,8 +1,8 @@
 package com.example.bookstore.service;
 
 
-import com.example.bookstore.dto.OrderDetailCondition;
-import com.example.bookstore.dto.OrderInfoCondition;
+import com.example.bookstore.dto.condition.OrderDetailCondition;
+import com.example.bookstore.dto.condition.OrderInfoCondition;
 import com.example.bookstore.entity.OrderDetail;
 import com.example.bookstore.entity.OrderInfo;
 import com.example.bookstore.repository.OrderDetailRepository;

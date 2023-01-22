@@ -6,8 +6,8 @@ import static com.example.bookstore.type.ResponseCode.DELETE_CART;
 import static com.example.bookstore.type.ResponseCode.GET_CART;
 import static com.example.bookstore.type.ResponseCode.UPDATE_QUANTITY_OF_BOOK_IN_CART;
 
-import com.example.bookstore.dto.CartItemCondition;
-import com.example.bookstore.dto.CartUpdateRequest;
+import com.example.bookstore.dto.condition.CartItemCondition;
+import com.example.bookstore.dto.request.CartUpdateRequest;
 import com.example.bookstore.dto.common.ApiResponse;
 import com.example.bookstore.service.CartService;
 import java.util.List;

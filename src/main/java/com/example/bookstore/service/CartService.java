@@ -5,7 +5,7 @@ import static com.example.bookstore.type.ErrorCode.DOES_NOT_EXIST_BOOK_ID;
 import static com.example.bookstore.type.ErrorCode.DOES_NOT_EXIST_CART_ITEM_ID;
 import static com.example.bookstore.type.ErrorCode.USER_NOT_FOUND;
 
-import com.example.bookstore.dto.CartItemCondition;
+import com.example.bookstore.dto.condition.CartItemCondition;
 import com.example.bookstore.entity.Book;
 import com.example.bookstore.entity.CartItem;
 import com.example.bookstore.entity.User;

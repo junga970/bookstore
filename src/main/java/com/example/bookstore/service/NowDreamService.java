@@ -9,8 +9,8 @@ import static com.example.bookstore.type.ErrorCode.FAILED_TO_ACQUIRE_LOCK;
 import static com.example.bookstore.type.ErrorCode.SOLD_OUT;
 import static com.example.bookstore.type.ErrorCode.USER_NOT_FOUND;
 
-import com.example.bookstore.dto.NowDreamOrderRequest;
-import com.example.bookstore.dto.NowDreamStockCondition;
+import com.example.bookstore.dto.request.NowDreamOrderRequest;
+import com.example.bookstore.dto.condition.NowDreamStockCondition;
 import com.example.bookstore.entity.Book;
 import com.example.bookstore.entity.CartItem;
 import com.example.bookstore.entity.OrderDetail;

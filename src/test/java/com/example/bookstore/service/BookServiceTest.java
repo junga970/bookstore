@@ -9,7 +9,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
-import com.example.bookstore.dto.BookCondition;
+import com.example.bookstore.dto.condition.BookCondition;
 import com.example.bookstore.entity.Book;
 import com.example.bookstore.entity.BookDocument;
 import com.example.bookstore.exception.CustomException;

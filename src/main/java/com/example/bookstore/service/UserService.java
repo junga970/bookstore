@@ -7,8 +7,8 @@ import static com.example.bookstore.type.ErrorCode.INVALID_PASSWORD;
 
 import com.example.bookstore.config.jwt.JwtTokenProvider;
 import com.example.bookstore.dto.Token;
-import com.example.bookstore.dto.LoginRequest;
-import com.example.bookstore.dto.RegisterRequest;
+import com.example.bookstore.dto.request.LoginRequest;
+import com.example.bookstore.dto.request.RegisterRequest;
 import com.example.bookstore.entity.User;
 import com.example.bookstore.exception.CustomException;
 import com.example.bookstore.repository.UserRepository;

@@ -1,4 +1,4 @@
-package com.example.bookstore.dto;
+package com.example.bookstore.dto.condition;
 
 import com.example.bookstore.entity.OrderInfo;
 import java.time.LocalDateTime;
