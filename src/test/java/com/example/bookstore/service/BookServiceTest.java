@@ -8,16 +8,23 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import com.example.bookstore.dto.condition.BookCondition;
+import com.example.bookstore.dto.request.BookRequest;
 import com.example.bookstore.entity.Book;
 import com.example.bookstore.entity.BookDocument;
+import com.example.bookstore.entity.Category;
+import com.example.bookstore.entity.SubCategory;
 import com.example.bookstore.exception.CustomException;
 import com.example.bookstore.repository.BookRepository;
 import com.example.bookstore.repository.BookSearchRepository;
 import com.example.bookstore.repository.SubCategoryRepository;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -162,5 +169,69 @@ public class BookServiceTest {
 		assertEquals("프론트", pageInfo.getContent().get(1).getAuthors().get(0));
 		assertEquals(1, pageInfo.getTotalPages());
 		assertEquals(2, pageInfo.getTotalElements());
+	}
+
+	/*
+		관리자 도서 등록 테스트
+	*/
+	@Test
+	@DisplayName("도서 등록 성공")
+	void addBooksSuccess() {
+		// given
+		Category category = new Category("소설");
+		SubCategory subCategory = new SubCategory(category, "한국소설");
+
+		BookRequest request = BookRequest.builder()
+			.subCategoryId(1L)
+			.title("관리자 도서 등록하기")
+			.imageUrl("http://")
+			.publisher("테스트출판")
+			.publicationDate(LocalDate.now())
+			.authors(Arrays.asList("작가1", "작가2"))
+			.price(15000)
+			.discountPrice(13500)
+			.build();
+
+		Book book = Book.builder()
+			.subCategory(subCategory)
+			.title(request.getTitle())
+			.imageUrl(request.getImageUrl())
+			.publisher(request.getPublisher())
+			.publicationDate(request.getPublicationDate())
+			.authors(request.getAuthors())
+			.price(request.getPrice())
+			.discountPrice(request.getDiscountPrice())
+			.build();
+		book.setId(1L);
+
+		given(subCategoryRepository.findById(anyLong())).willReturn(Optional.of(subCategory));
+		given(bookRepository.save(any())).willReturn(book);
+
+		// when
+		bookService.addBooks(request);
+
+		// then
+		verify(subCategoryRepository, times(1)).findById(anyLong());
+		verify(bookRepository, times(1)).save(any());
+		verify(bookSearchRepository, times(1)).save(any());
+	}
+
+	@Test
+	@DisplayName("도서 등록 실패 - 존재하지 않는 카테고리")
+	void addBooksFailure_DoesNotExistSubCategoryId() {
+		// given
+		BookRequest request = BookRequest.builder()
+			.subCategoryId(1L)
+			.build();
+
+		given(subCategoryRepository.findById(anyLong())).willReturn(Optional.empty());
+
+		// when
+		CustomException exception = assertThrows(CustomException.class,
+			() -> bookService.addBooks(request));
+
+		// then
+		assertEquals(DOES_NOT_EXIST_SUB_CATEGORY_ID, exception.getErrorCode());
+		assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
 	}
 }
