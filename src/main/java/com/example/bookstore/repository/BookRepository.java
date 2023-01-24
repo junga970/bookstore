@@ -13,7 +13,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
 	@Query(
 		value = "SELECT * FROM book b\n"
-			+ "LEFT JOIN (SELECT book_id, SUM(quantity) sales_quantity FROM order_book GROUP BY book_id) b\n"
+			+ "LEFT JOIN (SELECT book_id, SUM(quantity) sales_quantity FROM order_detail GROUP BY book_id) b\n"
 			+ "ON b.id = b.book_id WHERE b.sub_category_id = :id",
 		countQuery = "SELECT COUNT(*) FROM book WHERE sub_category_id = :id",
 		nativeQuery = true
