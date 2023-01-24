@@ -25,7 +25,7 @@
   	<img src="https://img.shields.io/badge/Spring Boot 2.7.7-77A546">
 
 - **DataBase:**
-	<img src="https://img.shields.io/badge/MariaDB 10.6.11-002D40">
+	<img src="https://img.shields.io/badge/AWS RDS MariaDB 10.6.11-002D40">
 	<img src="https://img.shields.io/badge/Redis 7.0.7-9F1E10">
 	<img src="https://img.shields.io/badge/Elasticsearch 7.17.8-3DB7AA">
 
