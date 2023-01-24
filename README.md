@@ -44,7 +44,7 @@
 
 
 - **Data:**
-	<img src="https://img.shields.io/badge/Kibana-E55388">
+	<img src="https://img.shields.io/badge/Kibana 7.17.8-E55388">
 
 
 
@@ -125,6 +125,8 @@ order value
 
 - 쿼리스트링 방식으로 keyword, page 값을 요청받습니다.
 - keyword(도서 or 작가)를 포함하는 책 리스트를 반환합니다.(ES 조회)
+
+- [Kibana 저장된 도서 데이터 조회](http://15.164.245.51:5601/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-15m,to:now))&_a=(columns:!(),filters:!(),index:'7f648ac0-9abf-11ed-9529-c3e5e3c53eb8',interval:auto,query:(language:kuery,query:''),sort:!()))
 
 <br>
 
