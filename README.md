@@ -61,6 +61,9 @@
 
 <br>
 
+## 프로젝트 구조
+<img width="1307" alt="image" src="https://user-images.githubusercontent.com/111635735/214366894-5abcef37-5d6f-4cb0-b1a7-db770753f75c.png">
+
 
 ##  모델링
 
