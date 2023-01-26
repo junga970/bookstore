@@ -174,6 +174,8 @@ order value
 
 **기능에 대한 요청 & 응답을 자세히 확인할 수 있습니다.**
 
+!!! 혹시 500에러가 뜬다면 새로고침을 여러 번 시도해 주시면 됩니다.. !!!
+
 [https://documenter.getpostman.com/view/17844607/2s8ZDbWLSy](https://documenter.getpostman.com/view/17844607/2s8ZDbWLSy)
 
 
