@@ -114,7 +114,7 @@ order value
 
 - new : 최신순
 - high : 높은 가격순
-- row : 낮은 가격순
+- low : 낮은 가격순
 - bestseller : 판매순
 
 ```
