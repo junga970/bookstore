@@ -1,3 +1,9 @@
+<br>
+
+**❗ 현재 요금문제로 AWS EC2, RDS 인스턴스를 모두 중지한 상태라 테스트는 불가합니다. ❗**
+
+<br>
+
 # SpringBoot-Project-BookStore
 
 - **도서 쇼핑몰 사이트 API 개발**
